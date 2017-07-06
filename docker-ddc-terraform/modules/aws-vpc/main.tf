@@ -6,6 +6,20 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+resource "aws_security_group" "bastion_host" {
+  depends_on = "${aws_vpc.vpc}"
+  name = "vpc-bastion_host-sg"
+  description = "Bastion host for instances within this VPC. Managed by Terraform. Manual changes will be reversed."
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = "0.0.0.0/0"
+  }
+}
+
+resource "aws_in
+
 output "vpc_id" {
   value = "${aws_vpc.vpc.id}"
 }
