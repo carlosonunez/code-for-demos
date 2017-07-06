@@ -3,17 +3,10 @@ variable "aws_environment_name" {
 }
 
 variable "aws_route53_zone_name" {
-  description = <<EOF
-    The root DNS zone name, i.e. example.com.
-    Don't put your environment name here; use aws_route53_environment_name
-    instead.
-    EOF
+  description = "The root DNS zone name, i.e. example.com. Don't put your environment name here; use aws_route53_environment_name instead."
 }
 
 variable "aws_route53_zone_comment" {
   description = "A comment to add to this zone."
-  default = <<EOF
-    This zone is managed by Terraform. Any manual changes to it will
-    be reverted at any time.
-  EOF
+  default = "This zone is managed by Terraform. Any manual changes to it will be reverted at any time."
 }
