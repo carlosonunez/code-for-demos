@@ -21,7 +21,7 @@ module "vpc" {
 
 module "ucp_manager-cluster" {
   source = "./modules/aws-ec2-docker-ucp-manager-cluster"
-  aws_inbound_ssh_security_group_id = "${module.vpc.ssh_sg_id}"
+  aws_vpc_ssh_access_policy_sg_id = "${module.vpc.ssh_sg_id}"
   aws_vpc_id = "${module.vpc.id}"
   aws_route53_zone_id = "${module.dns_zone.id}"
   number_of_aws_availability_zones_to_use = "${var.ucp_az_count}"
