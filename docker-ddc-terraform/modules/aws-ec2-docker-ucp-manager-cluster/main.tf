@@ -45,4 +45,66 @@ resource "aws_instance" "ucp_manager_a" {
   ]
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%s-a", var.aws_region)}" 
+  instance_type = "${var.aws_ec2_instance_size}"
+  key_name = "${var.aws_environment_name}"
+  security_groups = [
+    "${var.aws_vpc_ssh_access_policy_sg_id}",
+    "${aws_security_group.ucp_manager.id}"
+  ]
+  tags = {
+    Name = "ucp-manager"
+    Environment = "${var.aws_environment_name}"
+  }
+  root_block_device = {
+    volume_size = 8
+    delete_on_termination = true
+  }
+}
+
+resource "aws_instance" "ucp_manager_b" {
+  depends_on = [
+    "aws_security_group.ucp_manager",
+    "aws_security_group.ucp_manager_lb"
+  ]
+  count = "${var.number_of_availability_zones_to_use == 2 ? 1 : 0}"
+  ami = "${data.aws_ami.coreos.id}"
+  availability_zone = "${format("%s-b", var.aws_region)}" 
+  instance_type = "${var.aws_ec2_instance_size}"
+  key_name = "${var.aws_environment_name}"
+  security_groups = [
+    "${var.aws_vpc_ssh_access_policy_sg_id}",
+    "${aws_security_group.ucp_manager.id}"
+  ]
+  tags = {
+    Name = "ucp-manager"
+    Environment = "${var.aws_environment_name}"
+  }
+  root_block_device = {
+    volume_size = 8
+    delete_on_termination = true
+  }
+}
+
+resource "aws_instance" "ucp_manager_c" {
+  depends_on = [
+    "aws_security_group.ucp_manager",
+    "aws_security_group.ucp_manager_lb"
+  ]
+  count = "${var.number_of_availability_zones_to_use == 3 ? 1 : 0}"
+  ami = "${data.aws_ami.coreos.id}"
+  availability_zone = "${format("%s-c", var.aws_region)}" 
+  instance_type = "${var.aws_ec2_instance_size}"
+  key_name = "${var.aws_environment_name}"
+  security_groups = [
+    "${var.aws_vpc_ssh_access_policy_sg_id}",
+    "${aws_security_group.ucp_manager.id}"
+  ]
+  tags = {
+    Name = "ucp-manager"
+    Environment = "${var.aws_environment_name}"
+  }
+  root_block_device = {
+    volume_size = 8
+    delete_on_termination = true
+  }
 }
