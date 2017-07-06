@@ -48,7 +48,7 @@ resource "aws_instance" "bastion_host" {
   depends_on = [
     "aws_security_group.bastion_host",
     "aws_security_group.all_instances",
-    "aws_ami.coreos"
+    "data.aws_ami.coreos"
   ]
   ami = "${data.aws_ami.coreos.id}"
   instance_type = "t2.micro"
