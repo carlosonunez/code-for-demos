@@ -13,7 +13,7 @@ resource "aws_security_group" "bastion_host" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = "0.0.0.0/0"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_security_group" "terraform_deployer" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = "${format("%s/32", var.terraform_deployer_ip)}"
+    cidr_blocks = ["${format("%s/32", var.terraform_deployer_ip)}"]
   }
 }
 
