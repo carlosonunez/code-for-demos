@@ -108,3 +108,13 @@ resource "aws_instance" "ucp_manager_c" {
     delete_on_termination = true
   }
 }
+
+/* Terraform doesn't have very good semantics for expressing things that
+are dynamically created during a plan, such as intermediate variables. Given
+that our ELB needs to know in advance which AZs it will be serving traffic to,
+but that list of AZs depends on the number_of_azs_to_use variable, this affects
+us in that there's no immediate way of modifying the list of AZs provided
+into the elb resource.
+
+So we hack around it by creating three load balancer resources and setting a condition
+on which to use depending on the number_of_azs_to_use parameter. */
