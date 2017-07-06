@@ -11,7 +11,6 @@ module "dns_zone" {
 }
 
 module "vpc" {
-  depends_on = [ "dns_zone" ]
   source = "./modules/aws-vpc"
   aws_vpc_cidr_block = "${var.aws_vpc_cidr_block}"
   aws_vpc_dns_domain = "${var.dns_zone_to_use}"
@@ -21,11 +20,6 @@ module "vpc" {
 }
 
 module "ucp_manager-cluster" {
-  depends_on = [
-    "dns_zone",
-    "vpc",
-    "ec2_key"
-  ]
   source = "./modules/aws-ec2-docker-ucp-manager-cluster"
   aws_inbound_ssh_security_group_id = "${module.vpc.ssh_sg_id}"
   aws_vpc_id = "${module.vpc.id}"
