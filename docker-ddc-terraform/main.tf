@@ -10,3 +10,9 @@ module "dns_zone" {
   aws_route53_zone_name = "${var.dns_zone_to_use}"
   aws_environment_name = "${var.environment_name}"
 }
+
+module "ec2_key" {
+  source = "./modules/aws-ec2-key"
+  key_name = "${var.environment_name}"
+  public_key = "${var.environment_public_key}"
+}
