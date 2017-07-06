@@ -15,7 +15,9 @@ variable "environment_rsa_public_key" {
 }
 
 variable "ucp_az_count" {
+  # required to force this to be an int.
   description = "The number of availability zones to deploy UCP managers onto."
+  default = 1
 }
 
 variable "ucp_manager_instance_size" {
