@@ -7,5 +7,5 @@ module "vpc" {
 
 module "dns_zone" {
   source = "./modules/aws-route53-hosted_zone"
-  zone_name = "${var.dns_zone_to_use}"
+  aws_route53_zone_name = "${var.dns_zone_to_use}"
 }
