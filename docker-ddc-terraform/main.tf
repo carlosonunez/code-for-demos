@@ -16,3 +16,8 @@ module "ec2_key" {
   aws_environment_name = "${var.environment_name}"
   aws_ec2_public_key = "${var.environment_rsa_public_key}"
 }
+
+module "ucp_manager-cluster" {
+  source = "./modules/aws-ec2-docker-ucp-manager-cluster"
+  aws_route53_zone_id = "${module.dns_zone.id}"
+}
