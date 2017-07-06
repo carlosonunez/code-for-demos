@@ -20,4 +20,5 @@ module "ec2_key" {
 module "ucp_manager-cluster" {
   source = "./modules/aws-ec2-docker-ucp-manager-cluster"
   aws_route53_zone_id = "${module.dns_zone.id}"
+  number_of_aws_availability_zones_to_use = "${var.ucp_az_count}"
 }
