@@ -20,5 +20,4 @@ variable "ucp_az_count" {
 
 variable "ucp_manager_instance_size" {
   description = "The size to use for our UCP managers."
-  default = "t2.micro"
 }
