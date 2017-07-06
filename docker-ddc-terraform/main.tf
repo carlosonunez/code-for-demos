@@ -14,5 +14,5 @@ module "dns_zone" {
 module "ec2_key" {
   source = "./modules/aws-ec2-key"
   key_name = "${var.environment_name}"
-  public_key = "${var.environment_public_key}"
+  public_key = "${var.environment_rsa_public_key}"
 }
