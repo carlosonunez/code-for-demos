@@ -13,3 +13,7 @@ data "aws_ami" "coreos" {
     values = [ "CoreOS-stable*" ]
   }
 }
+
+resource "aws_security_group" "ucp_manager_security_group" {
+  name = "ucp_manager_sg"
+}
