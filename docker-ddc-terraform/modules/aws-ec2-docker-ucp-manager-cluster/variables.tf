@@ -11,7 +11,7 @@ variable "aws_route53_zone_id" {
 }
 
 variable "number_of_availability_zones_to_use" {
-  description = "The number of AZs to use. The AZs selected for each UCP manager will be in ascending order based on the count provided, e.g. '1' = 'region-a', '2' = ['region-a','region-b'], etc."
+  description = "The number of AZs to use. The AZs selected for each UCP manager will be in ascending order based on the count provided, e.g. '1' = 'region-a', '2' = ['region-a','region-b'], etc. As such, at least one manager will always be deployed onto AZ 'a'."
 }
 
 variable "aws_ec2_instance_size" {
