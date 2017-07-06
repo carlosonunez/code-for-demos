@@ -67,7 +67,7 @@ resource "aws_instance" "ucp_manager_b" {
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
   ]
-  count = "${var.number_of_availability_zones_to_use == 2 ? 1 : 0}"
+  count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%s-b", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
@@ -91,7 +91,7 @@ resource "aws_instance" "ucp_manager_c" {
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
   ]
-  count = "${var.number_of_availability_zones_to_use == 3 ? 1 : 0}"
+  count = "${var.number_of_aws_availability_zones_to_use == 3 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%s-c", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
