@@ -38,3 +38,11 @@ resource "aws_security_group" "ucp_manager_lb" {
     security_groups = [ "${aws_security_group.ucp_manager.id}" ]
 }
 
+resource "aws_instance" "ucp_manager_a" {
+  depends_on = [
+    "aws_security_group.ucp_manager",
+    "aws_security_group.ucp_manager_lb"
+  ]
+  ami = "${data.aws_ami.coreos.id}"
+  availability_zone = "${format("%s-a", var.aws_region)}" 
+}
