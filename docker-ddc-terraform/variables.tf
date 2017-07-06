@@ -13,3 +13,12 @@ variable "environment_name" {
 variable "environment_rsa_public_key" {
   description = "The RSA public key to use for this environment. Ensure that its corresponding private key is stored somewhere where you won't lose it!"
 }
+
+variable "ucp_az_count" {
+  description = "The number of availability zones to deploy UCP managers onto."
+}
+
+variable "ucp_manager_instance_size" {
+  description = "The size to use for our UCP managers."
+  default = "t2.micro"
+}
