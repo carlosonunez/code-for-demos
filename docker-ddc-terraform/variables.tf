@@ -10,6 +10,6 @@ variable "environment_name" {
   description = "The name of the environment being deployed."
 }
 
-variable "environment_public_key" {
-  description = "The public key to use for this environment. Ensure that its corresponding private key is stored somewhere where you won't lose it!"
+variable "environment_rsa_public_key" {
+  description = "The RSA public key to use for this environment. Ensure that its corresponding private key is stored somewhere where you won't lose it!"
 }
