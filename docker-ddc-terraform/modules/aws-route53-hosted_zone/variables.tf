@@ -15,4 +15,5 @@ variable "aws_route53_zone_comment" {
   default = <<EOF
     This zone is managed by Terraform. Any manual changes to it will
     be reverted at any time.
+  EOF
 }
