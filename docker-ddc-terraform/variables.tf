@@ -21,3 +21,7 @@ variable "ucp_az_count" {
 variable "ucp_manager_instance_size" {
   description = "The size to use for our UCP managers."
 }
+
+variable "terraform_deployer_ip" {
+  description = "The *public* IP address for the machine that is running this Terraform configuration."
+}
