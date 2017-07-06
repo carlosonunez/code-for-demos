@@ -2,6 +2,10 @@ variable "aws_vpc_cidr_block" {
   description = "The CIDR block to use for your VPC."
 }
 
-variable "aws_vpc_subdomain" {
-  description = "Subdomain to use for the VPC name. This usually corresponds to the name of your environment."
+variable "aws_vpc_domain" {
+  description = "The DNS domain to which hosts within this VPC will be bound."
+}
+
+variable "aws_environment_name" {
+  description = "The name of the environment to which hosts in this AWS account are bound."
 }
