@@ -9,3 +9,11 @@ variable "aws_vpc_dns_domain" {
 variable "aws_environment_name" {
   description = "The name of the environment to which hosts in this AWS account are bound."
 }
+
+variable "terraform_deployer_ip" {
+  description = "The IP address of the machine that's deploying this infrastructure. Needed so that Terraform can continue to provision machines within the VPC."
+}
+
+variable "aws_route53_zone_id" {
+  description = "The Route53 zone hosting this gateway's CNAME record."
+}
