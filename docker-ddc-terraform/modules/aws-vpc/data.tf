@@ -1,4 +1,4 @@
-data "aws_ami" "CoreOS" {
+data "aws_ami" "coreos" {
   most_recent = true
   filter {
     name = "owner-id"
