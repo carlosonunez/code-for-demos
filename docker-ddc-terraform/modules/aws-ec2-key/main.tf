@@ -4,5 +4,5 @@ resource "aws_key_pair" "ec2_key" {
 }
 
 output "ec2_key" {
-  key_name = "${aws_key_pair.ec2_key.key_name}"
+  value = "${aws_key_pair.ec2_key.key_name}"
 }
