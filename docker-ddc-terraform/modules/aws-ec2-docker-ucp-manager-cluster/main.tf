@@ -45,7 +45,7 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_security_group.ucp_manager_lb"
   ]
   ami = "${data.aws_ami.coreos.id}"
-  availability_zone = "${format("%s-a", var.aws_region)}" 
+  availability_zone = "${format("%sa", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
   security_groups = [
@@ -69,7 +69,7 @@ resource "aws_instance" "ucp_manager_b" {
   ]
   count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
-  availability_zone = "${format("%s-b", var.aws_region)}" 
+  availability_zone = "${format("%sb", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
   security_groups = [
@@ -93,7 +93,7 @@ resource "aws_instance" "ucp_manager_c" {
   ]
   count = "${var.number_of_aws_availability_zones_to_use == 3 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
-  availability_zone = "${format("%s-c", var.aws_region)}" 
+  availability_zone = "${format("%sc", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
   security_groups = [
