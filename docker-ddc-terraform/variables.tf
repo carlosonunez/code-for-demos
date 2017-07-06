@@ -25,3 +25,7 @@ variable "ucp_manager_instance_size" {
 variable "terraform_deployer_ip" {
   description = "The *public* IP address for the machine that is running this Terraform configuration."
 }
+
+variable "aws_region" {
+  description = "The region to deploy to."
+}
