@@ -17,3 +17,11 @@ variable "number_of_availability_zones_to_use" {
 variable "aws_ec2_instance_size" {
   description = "The instance size to use for *all* UCP managers."
 }
+
+variable "aws_region" {
+  description = "The region to deploy these instances into."
+}
+
+variable "aws_environment_name" {
+  description = "The name of the environment into which this cluster will be deployed."
+}
