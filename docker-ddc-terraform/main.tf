@@ -27,4 +27,5 @@ module "ucp_manager-cluster" {
   number_of_aws_availability_zones_to_use = "${var.ucp_az_count}"
   aws_ec2_instance_size = "${var.ucp_manager_instance_size}"
   aws_region = "${var.aws_region}"
+  aws_environment_name = "${var.environment_name}"
 }
