@@ -2,7 +2,7 @@ variable "aws_vpc_cidr_block" {
   description = "The CIDR block to use for your VPC."
 }
 
-variable "aws_vpc_domain" {
+variable "aws_vpc_dns_domain" {
   description = "The DNS domain to which hosts within this VPC will be bound."
 }
 
