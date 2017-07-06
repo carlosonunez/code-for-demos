@@ -1,4 +1,4 @@
-variable "aws_route53_environment_name" {
+variable "aws_environment_name" {
   description = "The environment for which this zone is being created."
 }
 
