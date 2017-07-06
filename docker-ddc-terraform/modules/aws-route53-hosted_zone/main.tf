@@ -3,6 +3,6 @@ resource "aws_route53_zone" "hosted_zone" {
   comment = "${var.aws_route53_zone_comment}"
   tags = {
     Name = "${var.aws_route53_zone_name}"
-    Environment = "${var.aws_route53_environment_name}"
+    Environment = "${var.aws_environment_name}"
   }
 }
