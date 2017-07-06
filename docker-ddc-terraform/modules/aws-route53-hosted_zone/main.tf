@@ -6,3 +6,7 @@ resource "aws_route53_zone" "hosted_zone" {
     Environment = "${var.aws_environment_name}"
   }
 }
+
+output "id" {
+  value = "${aws_route53_zone.hosted_zone.zone_id}"
+}
