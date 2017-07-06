@@ -5,3 +5,7 @@ resource "aws_vpc" "vpc" {
     Environment = "${var.aws_environment_name}"
   }
 }
+
+output "vpc_id" {
+  value = "${aws_vpc.vpc.id}"
+}
