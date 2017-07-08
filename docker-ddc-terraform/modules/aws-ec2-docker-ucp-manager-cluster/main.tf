@@ -134,8 +134,8 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   listener {
     instance_port = "443"
     instance_protocol = "https"
-    instance_port = "443"
-    instance_protocol = "http"
+    lb_port = "443"
+    lb_protocol = "http"
   }
 
   health_check {
@@ -161,8 +161,8 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   listener {
     instance_port = "443"
     instance_protocol = "https"
-    instance_port = "443"
-    instance_protocol = "http"
+    lb_port = "443"
+    lb_protocol = "http"
   }
 
   health_check {
@@ -190,8 +190,8 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
   listener {
     instance_port = "443"
     instance_protocol = "https"
-    instance_port = "443"
-    instance_protocol = "http"
+    lb_port = "443"
+    lb_protocol = "http"
   }
 
   health_check {
