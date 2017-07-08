@@ -31,3 +31,23 @@ variable "terraform_deployer_ip" {
 variable "aws_region" {
   description = "The region to deploy to."
 }
+
+variable "load_balancer_number_of_checks_until_healthy" {
+  description = "The number of checks before the instance is declared healthy."
+  default = 3
+}
+
+variable "load_balancer_number_of_checks_until_not_healthy" {
+  description = "The number of checks before the instance is declared unhealthy."
+  default = 3
+}
+
+variable "load_balancer_target" {
+  description = "The load balancer target path. See here for more details on the formatting: https://www.terraform.io/docs/providers/aws/r/elb.html"
+  default = "HTTPS:443/_ping"
+}
+
+variable "load_balancer_health_check_interval_in_seconds" {
+  description = "The amount of time (in seconds) to wait between health checks."
+  default = 15
+}
