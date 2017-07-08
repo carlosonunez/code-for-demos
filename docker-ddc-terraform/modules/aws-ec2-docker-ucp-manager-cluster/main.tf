@@ -15,6 +15,7 @@ data "aws_ami" "coreos" {
 }
 
 resource "aws_security_group" "ucp_manager" {
+  /* TODO: See if setting egress to the LB only affects operations. */
   name = "ucp_manager-sg"
   description = "Security group for UCP managers. Managed by Terraform."
   vpc_id = "${var.aws_vpc_id}"
@@ -123,12 +124,53 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   count = "${var.number_of_aws_availability_zones_to_use <= 1 ? 1 : 0}"
   name = "ucp-manager-lb"
   availability_zones = ["${format("%sa", var.aws_region)}"]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  instances = [ "${aws_instance.ucp_manager_a.id}" ]
+
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
+  the managers use mutual TLS between each other and doing so breaks
+  this trust. See here for more details: 
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
+  listener {
+    instance_port = "443"
+    instance_protocol = "https"
+    instance_port = "443"
+    instance_protocol = "http"
+  }
+
+  health_check {
+    healthy_threshold = 3
+    unhealthy_threshold = 3
+    target = "HTTPS:443/_ping"
+    interval = 15
+  }
 }
 
 resource "aws_elb" "ucp_manager_elb_dual_az" {
   count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
   availability_zones = ["${format("%sa", var.aws_region)}", 
                         "${format("%sb", var.aws_region)}"]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  instances = [ "${aws_instance.ucp_manager_a.id}",
+                "${aws_instance.ucp_manager_b.id}" ]
+
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
+  the managers use mutual TLS between each other and doing so breaks
+  this trust. See here for more details: 
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
+  listener {
+    instance_port = "443"
+    instance_protocol = "https"
+    instance_port = "443"
+    instance_protocol = "http"
+  }
+
+  health_check {
+    healthy_threshold = 3
+    unhealthy_threshold = 3
+    target = "HTTPS:443/_ping"
+    interval = 15
+  }
 }
 
 resource "aws_elb" "ucp_manager_elb_tri_az" {
@@ -136,4 +178,26 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
   availability_zones = ["${format("%sa", var.aws_region)}",
                         "${format("%sb", var.aws_region)}",
                         "${format("%sc", var.aws_region)}"]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  instances = [ "${aws_instance.ucp_manager_a.id}",
+                "${aws_instance.ucp_manager_b.id}",
+                "${aws_instance.ucp_manager_c.id}" ]
+
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
+  the managers use mutual TLS between each other and doing so breaks
+  this trust. See here for more details: 
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
+  listener {
+    instance_port = "443"
+    instance_protocol = "https"
+    instance_port = "443"
+    instance_protocol = "http"
+  }
+
+  health_check {
+    healthy_threshold = 3
+    unhealthy_threshold = 3
+    target = "HTTPS:443/_ping"
+    interval = 15
+  }
 }
