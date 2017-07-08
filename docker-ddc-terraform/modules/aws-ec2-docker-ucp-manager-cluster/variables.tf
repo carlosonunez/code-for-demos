@@ -6,6 +6,10 @@ variable "aws_vpc_ssh_access_policy_sg_id" {
   description = "The security group describing the access policy for instances within this VPC."
 }
 
+variable "aws_vpc_subnet_cidr" {
+  description = "The VPC subnet to provision these instances into."
+}
+
 variable "aws_route53_zone_id" {
   description = "The Route 53 zone from which records for this cluster will be hosted."
 }
