@@ -11,7 +11,7 @@ module "dns_zone" {
 }
 
 module "vpc" {
-  source = "./modules/aws-vpc"
+  source = "./modules/aws-vpc-with-bastion-host"
   aws_vpc_cidr_block = "${var.aws_vpc_cidr_block}"
   aws_vpc_dns_domain = "${var.dns_zone_to_use}"
   aws_environment_name = "${var.environment_name}"
