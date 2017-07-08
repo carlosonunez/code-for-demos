@@ -6,7 +6,7 @@ variable "aws_vpc_ssh_access_policy_sg_id" {
   description = "The security group describing the access policy for instances within this VPC."
 }
 
-variable "aws_vpc_subnet_cidr" {
+variable "aws_vpc_subnet_id" {
   description = "The VPC subnet to provision these instances into."
 }
 
