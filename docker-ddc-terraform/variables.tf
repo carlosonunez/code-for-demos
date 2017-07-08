@@ -47,6 +47,26 @@ variable "load_balancer_target" {
   default = "HTTPS:443/_ping"
 }
 
+variable "load_balancer_origin_port" {
+  description = "The port on the instances backed by this load balancer to direct traffic to."
+  default = 443
+}
+
+variable "load_balancer_origin_protocol" {
+  description = "The protocol being served by these backed instances."
+  default = "https"
+}
+
+variable "load_balancer_listening_port" {
+  description = "The port that this load balancer will listen on."
+  default = 443
+}
+
+variable "load_balancer_listening_protocol" {
+  description = "The protocol that this load balancer will listen on."
+  default = "http"
+}
+
 variable "load_balancer_health_check_interval_in_seconds" {
   description = "The amount of time (in seconds) to wait between health checks."
   default = 15
