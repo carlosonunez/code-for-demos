@@ -136,7 +136,7 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   count = "${var.number_of_aws_availability_zones_to_use <= 1 ? 1 : 0}"
   name = "ucp-manager-lb"
   availability_zones = ["${format("%sa", var.aws_region)}"]
-  vpc_security_group_ids = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}" ]
 
   /* Docker does not recommend having the ELB terminate HTTPS connections, as
@@ -167,7 +167,7 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
   availability_zones = ["${format("%sa", var.aws_region)}", 
                         "${format("%sb", var.aws_region)}"]
-  vpc_security_group_ids = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}",
                 "${aws_instance.ucp_manager_b.id}" ]
 
