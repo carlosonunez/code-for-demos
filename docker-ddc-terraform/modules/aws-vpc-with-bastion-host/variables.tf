@@ -17,3 +17,7 @@ variable "terraform_deployer_ip" {
 variable "aws_route53_zone_id" {
   description = "The Route53 zone hosting this gateway's CNAME record."
 }
+
+variable "management_subnet_cidr_block" {
+  description = "The CIDR block in which management instances will live."
+}
