@@ -10,7 +10,7 @@ module "dns_zone" {
   aws_environment_name = "${var.environment_name}"
 }
 
-module "vpc" {
+module "vpc_with_bastion_host" {
   source = "./modules/aws-vpc-with-bastion-host"
   aws_vpc_cidr_block = "${var.aws_vpc_cidr_block}"
   aws_vpc_dns_domain = "${var.dns_zone_to_use}"
@@ -21,8 +21,8 @@ module "vpc" {
 
 module "ucp_manager-cluster" {
   source = "./modules/aws-ec2-docker-ucp-manager-cluster"
-  aws_vpc_id = "${module.vpc.vpc_id}"
-  aws_vpc_ssh_access_policy_sg_id = "${module.vpc.default_ssh_sg_id}"
+  aws_vpc_id = "${module.vpc_with_bastion_host.vpc_id}"
+  aws_vpc_ssh_access_policy_sg_id = "${module.vpc_with_bastion_host.default_ssh_sg_id}"
   aws_route53_zone_id = "${module.dns_zone.id}"
   number_of_aws_availability_zones_to_use = "${var.ucp_az_count}"
   aws_ec2_instance_size = "${var.ucp_manager_instance_size}"
