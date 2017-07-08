@@ -51,3 +51,8 @@ variable "load_balancer_health_check_interval_in_seconds" {
   description = "The amount of time (in seconds) to wait between health checks."
   default = 15
 }
+
+variable "load_balancer_health_check_timeout_in_seconds" {
+  description = "The amount of time (in seconds) to wait until the health check times out."
+  default = 5
+}
