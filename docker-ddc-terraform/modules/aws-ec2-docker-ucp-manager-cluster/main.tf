@@ -15,7 +15,7 @@ data "aws_ami" "coreos" {
 }
 
 resource "aws_security_group" "ucp_manager" {
-  */ TODO: See if setting egress to the LB only affects operations. */
+  /* TODO: See if setting egress to the LB only affects operations. */
   name = "ucp_manager-sg"
   description = "Security group for UCP managers. Managed by Terraform."
   vpc_id = "${var.aws_vpc_id}"
