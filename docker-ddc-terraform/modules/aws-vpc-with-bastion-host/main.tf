@@ -40,7 +40,14 @@ resource "aws_security_group" "all_instances" {
     to_port = 22
     protocol = "tcp"
     security_groups = [
-      "${aws_security_group.bastion_host.id}",
+      "${aws_security_group.bastion_host.id}"
+    ]
+  }
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    security_groups = [
       "${aws_security_group.terraform_deployer.id}"
     ]
   }
