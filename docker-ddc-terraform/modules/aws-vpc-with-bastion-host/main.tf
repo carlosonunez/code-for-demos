@@ -75,15 +75,3 @@ resource "aws_route53_record" "bastion_host" {
   ttl = 1
   records = [ "${aws_instance.bastion_host.public_ip}" ]
 }
-
-output "vpc_id" {
-  value = "${aws_vpc.vpc.id}"
-}
-
-output "bastion_host_sg_id" {
-  value = "${aws_security_group.bastion_host.id}"
-}
-
-output "default_ssh_sg_id" {
-  value = "${aws_security_group.all_instances.id}"
-}
