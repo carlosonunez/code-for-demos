@@ -21,6 +21,7 @@ resource "aws_security_group" "terraform_deployer" {
   depends_on = ["aws_vpc.vpc"]
   name = "terraform-deployer-sg"
   description = "Security group for the Terraform deployment machine. Managed by Terraform. Manual changes will be reversed."
+  vpc_id = "${aws_vpc.vpc.id}"
   ingress {
     from_port = 22
     to_port = 22
@@ -33,6 +34,7 @@ resource "aws_security_group" "all_instances" {
   depends_on = ["aws_vpc.vpc"]
   name = "${format("%s-ssh-access-sg", var.aws_environment_name)}"
   description = "Access policy for instances in the environment specified. Managed by Terraform. Manual changes will be reversed."
+  vpc_id = "${aws_vpc.vpc.id}"
   ingress {
     from_port = 22
     to_port = 22
@@ -44,12 +46,22 @@ resource "aws_security_group" "all_instances" {
   }
 }
 
+resource "aws_subnet" "management" {
+  depends_on = [
+    "aws_vpc.vpc" 
+  ]
+  vpc_id = "${aws_vpc.vpc.id}"
+  cidr_block = "${var.management_subnet_cidr_block}"
+}
+
 resource "aws_instance" "bastion_host" {
   depends_on = [
     "aws_security_group.bastion_host",
     "aws_security_group.all_instances",
-    "data.aws_ami.coreos"
+    "data.aws_ami.coreos",
+    "aws_subnet.management"
   ]
+  subnet_id = "${aws_subnet.management.id}"
   ami = "${data.aws_ami.coreos.id}"
   instance_type = "t2.micro"
   key_name = "${var.aws_environment_name}"
