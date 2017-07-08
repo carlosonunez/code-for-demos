@@ -17,6 +17,7 @@ module "vpc_with_bastion_host" {
   aws_environment_name = "${var.environment_name}"
   terraform_deployer_ip = "${var.terraform_deployer_ip}"
   aws_route53_zone_id = "${module.dns_zone.id}"
+  management_subnet_cidr_block = "${var.management_subnet_cidr_block}"
 }
 
 module "ucp_manager-cluster" {
