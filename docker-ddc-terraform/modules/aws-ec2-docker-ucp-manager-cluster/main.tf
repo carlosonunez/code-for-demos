@@ -200,7 +200,7 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
   availability_zones = ["${format("%sa", var.aws_region)}",
                         "${format("%sb", var.aws_region)}",
                         "${format("%sc", var.aws_region)}"]
-  vpc_security_group_ids = [ "${aws_security_group.ucp_manager_lb.id}" ]
+  security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}",
                 "${aws_instance.ucp_manager_b.id}",
                 "${aws_instance.ucp_manager_c.id}" ]
