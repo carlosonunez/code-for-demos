@@ -31,4 +31,3 @@ variable "terraform_deployer_ip" {
 variable "aws_region" {
   description = "The region to deploy to."
 }
-
