@@ -132,10 +132,10 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   this trust. See here for more details: 
   https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
   listener {
-    instance_port = "443"
-    instance_protocol = "https"
-    lb_port = "443"
-    lb_protocol = "http"
+    instance_port = "${var.load_balancer_origin_port}"
+    instance_protocol = "${var.load_balancer_origin_protocol}"
+    lb_port = "${var.load_balancer_listening_port}"
+    lb_protocol = "${var.load_balancer_listening_protocol}"
   }
 
   health_check {
@@ -158,12 +158,11 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   /* Docker does not recommend having the ELB terminate HTTPS connections, as
   the managers use mutual TLS between each other and doing so breaks
   this trust. See here for more details: 
-  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
-  listener {
-    instance_port = "443"
-    instance_protocol = "https"
-    lb_port = "443"
-    lb_protocol = "http"
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */ listener {
+    instance_port = "${var.load_balancer_origin_port}"
+    instance_protocol = "${var.load_balancer_origin_protocol}"
+    lb_port = "${var.load_balancer_listening_port}"
+    lb_protocol = "${var.load_balancer_listening_protocol}"
   }
 
   health_check {
@@ -190,10 +189,10 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
   this trust. See here for more details: 
   https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
   listener {
-    instance_port = "443"
-    instance_protocol = "https"
-    lb_port = "443"
-    lb_protocol = "http"
+    instance_port = "${var.load_balancer_origin_port}"
+    instance_protocol = "${var.load_balancer_origin_protocol}"
+    lb_port = "${var.load_balancer_listening_port}"
+    lb_protocol = "${var.load_balancer_listening_protocol}"
   }
 
   health_check {
