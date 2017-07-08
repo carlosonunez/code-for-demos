@@ -15,7 +15,7 @@ data "aws_ami" "coreos" {
 }
 
 resource "aws_security_group" "ucp_manager" {
-  /* TODO: See if setting egress to the LB only affects operations. */
+  /* TODO: See if setting egress to the LB only affects operations. /*
   name = "ucp_manager-sg"
   description = "Security group for UCP managers. Managed by Terraform."
   vpc_id = "${var.aws_vpc_id}"
@@ -111,7 +111,7 @@ resource "aws_instance" "ucp_manager_c" {
   }
 }
 
-*/ Terraform doesn't have very good semantics for expressing things that
+/* Terraform doesn't have very good semantics for expressing things that
 are dynamically created during a plan, such as intermediate variables. Given
 that our ELB needs to know in advance which AZs it will be serving traffic to,
 but that list of AZs depends on the number_of_azs_to_use variable, this affects
@@ -119,7 +119,7 @@ us in that there's no immediate way of modifying the list of AZs provided
 into the elb resource.
 
 So we hack around it by creating three load balancer resources and setting a condition
-on which one to use depending on the number_of_azs_to_use parameter. */
+on which one to use depending on the number_of_azs_to_use parameter. /*
 resource "aws_elb" "ucp_manager_elb_single_az" {
   count = "${var.number_of_aws_availability_zones_to_use <= 1 ? 1 : 0}"
   name = "ucp-manager-lb"
@@ -127,10 +127,10 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}" ]
 
-  */ Docker does not recommend having the ELB terminate HTTPS connections, as
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
   the managers use mutual TLS between each other and doing so breaks
   this trust. See here for more details: 
-  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
   listener {
     instance_port = "443"
     instance_protocol = "https"
@@ -154,10 +154,10 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   instances = [ "${aws_instance.ucp_manager_a.id}",
                 "${aws_instance.ucp_manager_b.id}" ]
 
-  */ Docker does not recommend having the ELB terminate HTTPS connections, as
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
   the managers use mutual TLS between each other and doing so breaks
   this trust. See here for more details: 
-  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
   listener {
     instance_port = "443"
     instance_protocol = "https"
@@ -183,10 +183,10 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
                 "${aws_instance.ucp_manager_b.id}",
                 "${aws_instance.ucp_manager_c.id}" ]
 
-  */ Docker does not recommend having the ELB terminate HTTPS connections, as
+  /* Docker does not recommend having the ELB terminate HTTPS connections, as
   the managers use mutual TLS between each other and doing so breaks
   this trust. See here for more details: 
-  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp */
+  https://docs.docker.com/datacenter/ucp/2.1/guides/admin/configure/use-a-load-balancer/#load-balancing-on-ucp /*
   listener {
     instance_port = "443"
     instance_protocol = "https"
