@@ -76,3 +76,7 @@ variable "load_balancer_health_check_timeout_in_seconds" {
   description = "The amount of time (in seconds) to wait until the health check times out."
   default = 5
 }
+
+variable "subnet_cidr_block" {
+  description = "The CIDR block to use for the subnet created for Docker UCP managers."
+}
