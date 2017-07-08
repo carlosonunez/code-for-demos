@@ -21,6 +21,7 @@ module "vpc_with_bastion_host" {
 
 module "ucp_manager-cluster" {
   source = "./modules/aws-ec2-docker-ucp-manager-cluster"
+  aws_vpc_subnet = "${module.vpc_with_bastion_host.subnet_cidr}"
   aws_vpc_id = "${module.vpc_with_bastion_host.vpc_id}"
   aws_vpc_ssh_access_policy_sg_id = "${module.vpc_with_bastion_host.default_ssh_sg_id}"
   aws_route53_zone_id = "${module.dns_zone.id}"
