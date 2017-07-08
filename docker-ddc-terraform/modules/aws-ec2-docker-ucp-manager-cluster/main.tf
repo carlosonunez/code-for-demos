@@ -139,10 +139,11 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   }
 
   health_check {
-    healthy_threshold = 3
-    unhealthy_threshold = 3
-    target = "HTTPS:443/_ping"
-    interval = 15
+    healthy_threshold = "${var.load_balancer_number_of_checks_until_healthy}"
+    unhealthy_threshold = "${var.load_balancer_number_of_checks_until_not_healthy}"
+    target = "${var.load_balancer_target}"
+    interval = "${var.load_balancer_health_check_interval_in_seconds}"
+    timeout = "${var.load_balancer_health_check_timeout_in_seconds}"15
   }
 }
 
@@ -166,10 +167,11 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   }
 
   health_check {
-    healthy_threshold = 3
-    unhealthy_threshold = 3
-    target = "HTTPS:443/_ping"
-    interval = 15
+    healthy_threshold = "${var.load_balancer_number_of_checks_until_healthy}"
+    unhealthy_threshold = "${var.load_balancer_number_of_checks_until_not_healthy}"
+    target = "${var.load_balancer_target}"
+    interval = "${var.load_balancer_health_check_interval_in_seconds}"
+    timeout = "${var.load_balancer_health_check_timeout_in_seconds}"15
   }
 }
 
@@ -195,9 +197,10 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
   }
 
   health_check {
-    healthy_threshold = 3
-    unhealthy_threshold = 3
-    target = "HTTPS:443/_ping"
-    interval = 15
+    healthy_threshold = "${var.load_balancer_number_of_checks_until_healthy}"
+    unhealthy_threshold = "${var.load_balancer_number_of_checks_until_not_healthy}"
+    target = "${var.load_balancer_target}"
+    interval = "${var.load_balancer_health_check_interval_in_seconds}"
+    timeout = "${var.load_balancer_health_check_timeout_in_seconds}"
   }
 }
