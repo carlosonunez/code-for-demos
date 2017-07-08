@@ -127,12 +127,13 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
 
 resource "aws_elb" "ucp_manager_elb_dual_az" {
   count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
-  name = "ucp-manager-lb"
-  availability_zones = ["${format("%sa", var.aws_region)}","${format("%sb", var.aws_region)}"]
+  availability_zones = ["${format("%sa", var.aws_region)}", 
+                        "${format("%sb", var.aws_region)}"]
 }
 
 resource "aws_elb" "ucp_manager_elb_tri_az" {
   count = "${var.number_of_aws_availability_zones_to_use == 3 ? 1 : 0}"
-  name = "ucp-manager-lb"
-  availability_zones = ["${format("%sa", var.aws_region)}","${format("%sb", var.aws_region)}","${format("%sc", var.aws_region)}"]
+  availability_zones = ["${format("%sa", var.aws_region)}",
+                        "${format("%sb", var.aws_region)}",
+                        "${format("%sc", var.aws_region)}"]
 }
