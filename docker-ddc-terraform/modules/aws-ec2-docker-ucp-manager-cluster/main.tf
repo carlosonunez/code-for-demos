@@ -36,7 +36,7 @@ resource "aws_security_group" "ucp_manager_lb" {
     from_port = 443
     to_port = 443
     protocol = "tcp"
-    vpc_security_group_ids = [ "${aws_security_group.ucp_manager.id}" ]
+    security_groups = [ "${aws_security_group.ucp_manager.id}" ]
   }
 }
 
