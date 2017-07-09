@@ -57,8 +57,7 @@ resource "aws_instance" "bastion_host" {
   instance_type = "t2.micro"
   key_name = "${var.aws_environment_name}"
   security_groups = [
-    "${aws_security_group.bastion_host.id}",
-    "${aws_security_group.terraform_deployer.id}"
+    "${aws_security_group.bastion_host.id}"
   ]
   tags = {
     Name = "bastion_host"
