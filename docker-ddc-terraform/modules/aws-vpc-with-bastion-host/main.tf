@@ -17,19 +17,6 @@ resource "aws_security_group" "bastion_host" {
   }
 }
 
-resource "aws_security_group" "terraform_deployer" {
-  depends_on = ["aws_vpc.vpc"]
-  name = "terraform-deployer-sg"
-  description = "Security group for the Terraform deployment machine. Managed by Terraform. Manual changes will be reversed."
-  vpc_id = "${aws_vpc.vpc.id}"
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["${format("%s/32", var.terraform_deployer_ip)}"]
-  }
-}
-
 resource "aws_security_group" "all_instances" {
   depends_on = ["aws_vpc.vpc"]
   name = "${format("%s-ssh-access-sg", var.aws_environment_name)}"
@@ -47,9 +34,7 @@ resource "aws_security_group" "all_instances" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    security_groups = [
-      "${aws_security_group.terraform_deployer.id}"
-    ]
+    cidr_blocks = ["${format("%s/32", var.terraform_deployer_ip)}"]
   }
 }
 
@@ -63,7 +48,6 @@ resource "aws_subnet" "management" {
 
 resource "aws_instance" "bastion_host" {
   depends_on = [
-    "aws_security_group.bastion_host",
     "aws_security_group.all_instances",
     "data.aws_ami.coreos",
     "aws_subnet.management"
