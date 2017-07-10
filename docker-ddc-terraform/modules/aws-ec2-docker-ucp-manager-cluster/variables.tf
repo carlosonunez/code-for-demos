@@ -73,6 +73,7 @@ variable "load_balancer_health_check_timeout_in_seconds" {
   default = 5
 }
 
-variable "subnet_cidr_block" {
-  description = "The CIDR block to use for the subnet created for Docker UCP managers."
+variable "subnet_cidr_block_list" {
+  type = "list"
+  description = "A list of CIDR block to use for the subnet created for Docker UCP managers."
 }
