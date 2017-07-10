@@ -75,5 +75,5 @@ variable "load_balancer_health_check_timeout_in_seconds" {
 
 variable "subnet_cidr_block_list" {
   type = "list"
-  description = "A list of CIDR block to use for the subnet created for Docker UCP managers."
+  description = "A list of CIDR block to use for the subnet created for Docker UCP managers. The subnets chosen for each availability zone are selected based on their positions within the list, i.e. the subnet for ${REGION}a will be the first element of this list."
 }
