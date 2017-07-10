@@ -40,9 +40,24 @@ resource "aws_security_group" "ucp_manager_lb" {
   }
 }
 
-resource "aws_subnet" "manager_subnet" {
+resource "aws_subnet" "manager_subnet_a" {
   vpc_id = "${var.aws_vpc_id}"
   cidr_block = "${var.subnet_cidr_block}"
+  availability_zone = "${format("%sa", var.aws_region)}"
+}
+
+resource "aws_subnet" "manager_subnet_b" {
+  count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
+  vpc_id = "${var.aws_vpc_id}"
+  cidr_block = "${var.subnet_cidr_block}"
+  availability_zone = "${format("%sb", var.aws_region)}"
+}
+
+resource "aws_subnet" "manager_subnet_c" {
+  count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
+  vpc_id = "${var.aws_vpc_id}"
+  cidr_block = "${var.subnet_cidr_block}"
+  availability_zone = "${format("%sc", var.aws_region)}"
 }
 
 resource "aws_instance" "ucp_manager_a" {
@@ -51,7 +66,7 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet"
   ]
-  subnet_id = "${aws_subnet.manager_subnet.id}"
+  subnet_id = "${aws_subnet.manager_subnet_a.id}"
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%sa", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
@@ -75,7 +90,7 @@ resource "aws_instance" "ucp_manager_b" {
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
   ]
-  subnet_id = "${aws_subnet.manager_subnet.id}"
+  subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%sb", var.aws_region)}" 
@@ -100,7 +115,7 @@ resource "aws_instance" "ucp_manager_c" {
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
   ]
-  subnet_id = "${aws_subnet.manager_subnet.id}"
+  subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
   ami = "${data.aws_ami.coreos.id}"
   availability_zone = "${format("%sc", var.aws_region)}" 
