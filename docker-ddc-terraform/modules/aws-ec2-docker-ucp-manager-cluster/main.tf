@@ -88,7 +88,7 @@ resource "aws_instance" "ucp_manager_a" {
 resource "aws_instance" "ucp_manager_b" {
   depends_on = [
     "aws_security_group.ucp_manager",
-    "aws_security_group.ucp_manager_lb"
+    "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_b"
   ]
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
@@ -114,7 +114,7 @@ resource "aws_instance" "ucp_manager_b" {
 resource "aws_instance" "ucp_manager_c" {
   depends_on = [
     "aws_security_group.ucp_manager",
-    "aws_security_group.ucp_manager_lb"
+    "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_c"
   ]
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
