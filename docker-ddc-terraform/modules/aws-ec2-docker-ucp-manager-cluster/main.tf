@@ -42,7 +42,7 @@ resource "aws_security_group" "ucp_manager_lb" {
 
 resource "aws_subnet" "manager_subnet_a" {
   vpc_id = "${var.aws_vpc_id}"
-  cidr_block = "${var.subnet_cidr_block_list_list[0]}"
+  cidr_block = "${var.subnet_cidr_block_list[0]}"
   availability_zone = "${format("%sa", var.aws_region)}"
 }
 
