@@ -36,10 +36,10 @@ variable "management_subnet_cidr_block" {
   description = "The CIDR block to use for the management subnet."
 }
 
-variable "docker_ucp_manager_subnet_cidr_block" {
-  description = "The CIDR block to use for Docker UCP managers."
+variable "docker_ucp_manager_subnet_cidr_block_list" {
+  description = "A list of CIDR blocks to use for Docker UCP managers (one for each subnet being deployed to)."
 }
 
-variable "docker_ucp_worker_subnet_cidr_block" {
-  description = "The CIDR block to use for Docker UCP workers."
+variable "docker_ucp_worker_subnet_cidr_block_list" {
+  description = "A list of The CIDR blocks to use for Docker UCP workers (one for each subnet being deployed to)."
 }
