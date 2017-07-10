@@ -64,7 +64,7 @@ resource "aws_instance" "ucp_manager_a" {
   depends_on = [
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb",
-    "aws_subnet.manager_subnet"
+    "aws_subnet.manager_subnet_a"
   ]
   subnet_id = "${aws_subnet.manager_subnet_a.id}"
   ami = "${data.aws_ami.coreos.id}"
@@ -89,6 +89,7 @@ resource "aws_instance" "ucp_manager_b" {
   depends_on = [
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
+    "aws_subnet.manager_subnet_b"
   ]
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
@@ -114,6 +115,7 @@ resource "aws_instance" "ucp_manager_c" {
   depends_on = [
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb"
+    "aws_subnet.manager_subnet_c"
   ]
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
