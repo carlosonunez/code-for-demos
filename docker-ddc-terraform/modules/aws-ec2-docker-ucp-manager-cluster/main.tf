@@ -42,21 +42,21 @@ resource "aws_security_group" "ucp_manager_lb" {
 
 resource "aws_subnet" "manager_subnet_a" {
   vpc_id = "${var.aws_vpc_id}"
-  cidr_block = "${var.subnet_cidr_block}"
+  cidr_block = "${var.subnet_cidr_block_list_list[0]}"
   availability_zone = "${format("%sa", var.aws_region)}"
 }
 
 resource "aws_subnet" "manager_subnet_b" {
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
   vpc_id = "${var.aws_vpc_id}"
-  cidr_block = "${var.subnet_cidr_block}"
+  cidr_block = "${var.subnet_cidr_block_list[1]}"
   availability_zone = "${format("%sb", var.aws_region)}"
 }
 
 resource "aws_subnet" "manager_subnet_c" {
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
   vpc_id = "${var.aws_vpc_id}"
-  cidr_block = "${var.subnet_cidr_block}"
+  cidr_block = "${var.subnet_cidr_block_list[2]}"
   availability_zone = "${format("%sc", var.aws_region)}"
 }
 
