@@ -8,6 +8,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_security_group" "bastion_host" {
   depends_on = ["aws_vpc.vpc"]
   name = "vpc-bastion_host-sg"
+  vpc_id = "${aws_vpc.vpc.id}"
   description = "Bastion host for instances within this VPC. Managed by Terraform. Manual changes will be reversed."
   ingress {
     from_port = 22
