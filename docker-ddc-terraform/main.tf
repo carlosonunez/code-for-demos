@@ -29,5 +29,5 @@ module "ucp_manager-cluster" {
   aws_ec2_instance_size = "${var.ucp_manager_instance_size}"
   aws_region = "${var.aws_region}"
   aws_environment_name = "${var.environment_name}"
-  subnet_cidr_block = "${var.docker_ucp_manager_subnet_cidr_block}"
+  subnet_cidr_block_list = "${var.docker_ucp_manager_subnet_cidr_block_list}"
 }
