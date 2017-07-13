@@ -1,4 +1,4 @@
 .terraform
 terraform.tfvars
 .DS_Store
-terraform.tfstate
+terraform.tfstate*
