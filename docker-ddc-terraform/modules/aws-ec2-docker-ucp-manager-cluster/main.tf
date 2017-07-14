@@ -155,7 +155,7 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   name = "ucp-manager-lb"
   availability_zones = ["${format("%sa", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
-  subnets = [ "${aws_subnet.manager_subnet_a}" ]
+  subnets = [ "${aws_subnet.manager_subnet_a.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}" ]
 
   /* Docker does not recommend having the ELB terminate HTTPS connections, as
@@ -189,8 +189,8 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
   availability_zones = ["${format("%sa", var.aws_region)}", 
                         "${format("%sb", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
-  subnets = [ "${aws_subnet.manager_subnet_a}",
-              "${aws_subnet.manager_subnet_b}" ]
+  subnets = [ "${aws_subnet.manager_subnet_a.id}",
+              "${aws_subnet.manager_subnet_b.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}",
                 "${aws_instance.ucp_manager_b.id}" ]
 
@@ -228,9 +228,9 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
                         "${format("%sb", var.aws_region)}",
                         "${format("%sc", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
-  subnets = [ "${aws_subnet.manager_subnet_a}", 
-              "${aws_subnet.manager_subnet_b}",
-              "${aws_subnet.manager_subnet_c}" ]
+  subnets = [ "${aws_subnet.manager_subnet_a.id}", 
+              "${aws_subnet.manager_subnet_b.id}",
+              "${aws_subnet.manager_subnet_c.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}",
                 "${aws_instance.ucp_manager_b.id}",
                 "${aws_instance.ucp_manager_c.id}" ]
