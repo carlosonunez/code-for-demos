@@ -107,7 +107,7 @@ resource "aws_instance" "bastion_host" {
     connection {
       type = "ssh"
       user = "core"
-      private_key = "${var.aws_ec2_private_key_location}"
+      private_key = "${file("${var.aws_ec2_private_key_location}")}"
       agent = false
     }
     source = "${var.aws_ec2_private_key_location}"
