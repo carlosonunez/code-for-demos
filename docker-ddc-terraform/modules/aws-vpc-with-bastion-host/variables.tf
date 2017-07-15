@@ -21,3 +21,7 @@ variable "aws_route53_zone_id" {
 variable "management_subnet_cidr_block" {
   description = "The CIDR block in which management instances will live."
 }
+
+variable "aws_ec2_private_key_location" {
+  description = "Location to the EC2 private key used for this environment."
+}
