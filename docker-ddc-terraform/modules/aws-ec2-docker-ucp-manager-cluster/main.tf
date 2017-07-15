@@ -153,7 +153,6 @@ resource "aws_elb" "ucp_manager_elb_single_az" {
   ]
   count = "${var.number_of_aws_availability_zones_to_use <= 1 ? 1 : 0}"
   name = "ucp-manager-lb"
-  availability_zones = ["${format("%sa", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   subnets = [ "${aws_subnet.manager_subnet_a.id}" ]
   instances = [ "${aws_instance.ucp_manager_a.id}" ]
@@ -186,8 +185,6 @@ resource "aws_elb" "ucp_manager_elb_dual_az" {
     "aws_subnet.manager_subnet_b"
   ]
   count = "${var.number_of_aws_availability_zones_to_use == 2 ? 1 : 0}"
-  availability_zones = ["${format("%sa", var.aws_region)}", 
-                        "${format("%sb", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   subnets = [ "${aws_subnet.manager_subnet_a.id}",
               "${aws_subnet.manager_subnet_b.id}" ]
@@ -224,9 +221,6 @@ resource "aws_elb" "ucp_manager_elb_tri_az" {
     "aws_security_group.ucp_manager_lb"
   ]
   count = "${var.number_of_aws_availability_zones_to_use == 3 ? 1 : 0}"
-  availability_zones = ["${format("%sa", var.aws_region)}",
-                        "${format("%sb", var.aws_region)}",
-                        "${format("%sc", var.aws_region)}"]
   security_groups = [ "${aws_security_group.ucp_manager_lb.id}" ]
   subnets = [ "${aws_subnet.manager_subnet_a.id}", 
               "${aws_subnet.manager_subnet_b.id}",
