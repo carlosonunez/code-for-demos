@@ -91,7 +91,7 @@ resource "aws_instance" "bastion_host" {
 
 resource "aws_route53_record" "bastion_host" {
   zone_id = "${var.aws_route53_zone_id}"
-  name = "management"
+  name = "${join(".",["management",var.dns_zone_to_use])}"
   type = "CNAME"
   ttl = 1
   records = [ "${aws_instance.bastion_host.public_ip}" ]
