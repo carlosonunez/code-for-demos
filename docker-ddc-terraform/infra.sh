@@ -5,11 +5,11 @@ usage() {
 ./infra (plan|apply) [terraform_options]
 Runs a Terraform plan or deployment while fetching the latest terraform.tfvars.
 
-**NOTE**: S3_INFRASTRUCTURE_BUCKET must be defined for your environment. Set it to the location of the terraform.tfvars file in S3.
+NOTE: S3_INFRASTRUCTURE_BUCKET must be defined for your environment. Set it to the location of the terraform.tfvars file in S3.
 
-**NOTE**: TARGET_ENVIRONMENT also needs to be set to the environment you wish to deploy.
+NOTE: TARGET_ENVIRONMENT also needs to be set to the environment you wish to deploy.
 
-**NOTE**: awscli must be installed. Install it with "pip install awscli".
+NOTE: awscli must be installed. Install it with "pip install awscli".
 EOF
 }
 
