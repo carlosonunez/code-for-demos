@@ -26,6 +26,11 @@ resource "aws_security_group" "ucp_manager" {
     to_port = 0
     protocol = -1
   }
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = -1
+    cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group" "ucp_manager_lb" {
@@ -67,6 +72,7 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_a"
   ]
+  associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_a.id}"
   ami = "${data.aws_ami.ubuntu.id}"
   availability_zone = "${format("%sa", var.aws_region)}" 
@@ -92,6 +98,7 @@ resource "aws_instance" "ucp_manager_b" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_b"
   ]
+  associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
   ami = "${data.aws_ami.ubuntu.id}"
@@ -118,6 +125,7 @@ resource "aws_instance" "ucp_manager_c" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_c"
   ]
+  associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
   ami = "${data.aws_ami.ubuntu.id}"
