@@ -82,9 +82,14 @@ then
     grep '<')"
   if [ "$unsaved_local_tfvars_changes" != "" ]
   then
+    command_to_run="aws s3 cp terraform.tfvars $terraform_tfvars_remote_path"
     rm 'terraform.tfvars.new'
     echo "ERROR: You have unsaved changes to your local Terraform tfvars. \
-Please upload them before running this script again."
+Please upload them before running this again."
+    echo ""
+    echo "To do that, run the following command:"
+    echo ""
+    echo $command_to_run
     exit 1
   else
     rm 'terraform.tfvars'
