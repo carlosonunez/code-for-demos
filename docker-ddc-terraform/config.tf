@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "${var.aws_s3_infrastructure_bucket}"
-    key = "${join("/",list("tfstate",var.environment_name))}"
-    region = "${var.aws_region}"
+    # Terraform doesn't support interpolations here.
+    # To work around this, we use the --backend-config argument a few times
+    # in ./infra.
   }
 }
