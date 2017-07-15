@@ -147,6 +147,7 @@ resource "aws_route53_record" "ucp_manager_b" {
   depends_on = [
     "aws_instance.ucp_manager_b"
   ]
+  count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
   zone_id = "${var.aws_route53_zone_id}"
   name = "ucp_manager_b"
   type = "CNAME"
@@ -191,6 +192,7 @@ resource "aws_route53_record" "ucp_manager_c" {
   depends_on = [
     "aws_instance.ucp_manager_c"
   ]
+  count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
   zone_id = "${var.aws_route53_zone_id}"
   name = "ucp_manager_c"
   type = "CNAME"
