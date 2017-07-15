@@ -102,6 +102,11 @@ resource "aws_instance" "bastion_host" {
     volume_size = 8
     delete_on_termination = true
   }
+
+  provisioner "file" {
+    source = "${var.aws_ec2_private_key_location}"
+    destination = "$HOME/.ssh/environment_private_key"
+  }
 }
 
 resource "aws_route53_record" "bastion_host" {
