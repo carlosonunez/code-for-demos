@@ -9,6 +9,10 @@ data "aws_ami" "ubuntu" {
     name = "virtualization-type"
     values = [ "hvm" ]
   }
+  filter {
+    name = "name"
+    values = [ "ubuntu/images/hvm-ssd/ubuntu-zenial*" ]
+  }
 }
 
 resource "aws_security_group" "ucp_manager" {
