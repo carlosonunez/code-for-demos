@@ -99,6 +99,17 @@ resource "aws_instance" "ucp_manager_a" {
   }
 }
 
+resource "aws_route53_record" "ucp_manager_a" {
+  depends_on = [
+    "aws_instance.ucp_manager_a"
+  ]
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_a"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_a.public_dns}" ]
+}
+
 resource "aws_instance" "ucp_manager_b" {
   depends_on = [
     "aws_security_group.ucp_manager",
@@ -132,6 +143,17 @@ resource "aws_instance" "ucp_manager_b" {
   }
 }
 
+resource "aws_route53_record" "ucp_manager_b" {
+  depends_on = [
+    "aws_instance.ucp_manager_b"
+  ]
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_b"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_b.public_dns}" ]
+}
+
 resource "aws_instance" "ucp_manager_c" {
   depends_on = [
     "aws_security_group.ucp_manager",
@@ -163,6 +185,17 @@ resource "aws_instance" "ucp_manager_c" {
     volume_size = 8
     delete_on_termination = true
   }
+}
+
+resource "aws_route53_record" "ucp_manager_c" {
+  depends_on = [
+    "aws_instance.ucp_manager_c"
+  ]
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_c"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_c.public_dns}" ]
 }
 
 /* Terraform doesn't have very good semantics for expressing things that
