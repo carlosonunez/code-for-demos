@@ -90,4 +90,4 @@ fi
 
 terraform get && \
 terraform $1 -var "aws_region=$our_current_region" \
-  -var "terraform_deployer_ip=$our_current_ip"
+  -var "terraform_deployer_ip=$our_current_ip" "${@:2}"
