@@ -1,0 +1,2 @@
+Host *
+  IdentityFile ~/.ssh/environment_private_key

@@ -31,4 +31,5 @@ module "ucp_manager-cluster" {
   aws_region = "${var.aws_region}"
   aws_environment_name = "${var.environment_name}"
   subnet_cidr_block_list = "${var.docker_ucp_manager_subnet_cidr_block_list}"
+  aws_ec2_private_key_location = "${var.aws_ec2_private_key_location}"
 }

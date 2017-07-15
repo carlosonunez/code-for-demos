@@ -80,6 +80,12 @@ resource "aws_security_group" "all_instances" {
 
 
 resource "aws_instance" "bastion_host" {
+  connection {
+    type = "ssh"
+    user = "core"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   depends_on = [
     "aws_security_group.bastion_host",
     "data.aws_ami.coreos",
@@ -104,14 +110,19 @@ resource "aws_instance" "bastion_host" {
   }
 
   provisioner "file" {
-    connection {
-      type = "ssh"
-      user = "core"
-      private_key = "${file("${var.aws_ec2_private_key_location}")}"
-      agent = false
-    }
     source = "${var.aws_ec2_private_key_location}"
     destination = "$HOME/.ssh/environment_private_key"
+  }
+
+  provisioner "file" {
+    source = "files/ssh_config"
+    destination = "$HOME/.ssh/config"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 700 $HOME/.ssh/environment_private_key"
+    ]
   }
 }
 

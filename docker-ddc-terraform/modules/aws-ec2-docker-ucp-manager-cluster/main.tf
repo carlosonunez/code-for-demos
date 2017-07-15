@@ -73,7 +73,15 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_a"
   ]
-  ami = "${data.aws_ami.coreos.id}"
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
+  associate_public_ip_address = true
+  subnet_id = "${aws_subnet.manager_subnet_a.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   availability_zone = "${format("%sa", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
@@ -91,12 +99,29 @@ resource "aws_instance" "ucp_manager_a" {
   }
 }
 
+resource "aws_route53_record" "ucp_manager_a" {
+  depends_on = [
+    "aws_instance.ucp_manager_a"
+  ]
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_a"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_a.public_dns}" ]
+}
+
 resource "aws_instance" "ucp_manager_b" {
   depends_on = [
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_b"
   ]
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
@@ -118,12 +143,30 @@ resource "aws_instance" "ucp_manager_b" {
   }
 }
 
+resource "aws_route53_record" "ucp_manager_b" {
+  depends_on = [
+    "aws_instance.ucp_manager_b"
+  ]
+  count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_b"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_b.public_dns}" ]
+}
+
 resource "aws_instance" "ucp_manager_c" {
   depends_on = [
     "aws_security_group.ucp_manager",
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_c"
   ]
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
@@ -143,6 +186,18 @@ resource "aws_instance" "ucp_manager_c" {
     volume_size = 8
     delete_on_termination = true
   }
+}
+
+resource "aws_route53_record" "ucp_manager_c" {
+  depends_on = [
+    "aws_instance.ucp_manager_c"
+  ]
+  count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
+  zone_id = "${var.aws_route53_zone_id}"
+  name = "ucp_manager_c"
+  type = "CNAME"
+  ttl = 1
+  records = [ "${aws_instance.ucp_manager_c.public_dns}" ]
 }
 
 /* Terraform doesn't have very good semantics for expressing things that
