@@ -71,6 +71,7 @@ resource "aws_instance" "bastion_host" {
     "data.aws_ami.coreos",
     "aws_subnet.management"
   ]
+  associate_public_ip_address = true
   subnet_id = "${aws_subnet.management.id}"
   ami = "${data.aws_ami.coreos.id}"
   instance_type = "t2.micro"
