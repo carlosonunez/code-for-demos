@@ -64,7 +64,7 @@ then
   exit 1
 fi
 
-terraform_tfvars_remote_path="s3://$S3_INFRASTRUCTURE_BUCKET/$TARGET_ENVIRONMENT/terraform.tfvars"
+terraform_tfvars_remote_path="s3://$S3_INFRASTRUCTURE_BUCKET/tfvars/$TARGET_ENVIRONMENT/terraform.tfvars"
 terraform_tfvars_fetch_result="$(aws s3 cp $terraform_tfvars_remote_path \
   'terraform.tfvars.new' 2>/dev/null; echo $?)"
 if [ "$terraform_tfvars_fetch_result" != "0" ]
