@@ -73,6 +73,12 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_a"
   ]
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_a.id}"
   ami = "${data.aws_ami.ubuntu.id}"
@@ -99,6 +105,12 @@ resource "aws_instance" "ucp_manager_b" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_b"
   ]
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
@@ -126,6 +138,12 @@ resource "aws_instance" "ucp_manager_c" {
     "aws_security_group.ucp_manager_lb",
     "aws_subnet.manager_subnet_c"
   ]
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    private_key = "${file("${var.aws_ec2_private_key_location}")}"
+    agent = false
+  }
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
