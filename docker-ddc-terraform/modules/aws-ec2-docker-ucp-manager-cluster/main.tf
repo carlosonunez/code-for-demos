@@ -1,16 +1,17 @@
-data "aws_ami" "coreos" {
+data "aws_ami" "ubuntu" {
   most_recent = true
   filter {
     name = "owner-id"
-    values = [ "595879546273" ]
+    values = [ "099720109477" ]
   }
+
   filter {
     name = "virtualization-type"
     values = [ "hvm" ]
   }
   filter {
     name = "name"
-    values = [ "CoreOS-stable*" ]
+    values = [ "ubuntu/images/hvm-ssd/ubuntu-*" ]
   }
 }
 
@@ -67,7 +68,7 @@ resource "aws_instance" "ucp_manager_a" {
     "aws_subnet.manager_subnet_a"
   ]
   subnet_id = "${aws_subnet.manager_subnet_a.id}"
-  ami = "${data.aws_ami.coreos.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   availability_zone = "${format("%sa", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
@@ -93,7 +94,7 @@ resource "aws_instance" "ucp_manager_b" {
   ]
   subnet_id = "${aws_subnet.manager_subnet_b.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 1 ? 1 : 0}"
-  ami = "${data.aws_ami.coreos.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   availability_zone = "${format("%sb", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
@@ -119,7 +120,7 @@ resource "aws_instance" "ucp_manager_c" {
   ]
   subnet_id = "${aws_subnet.manager_subnet_c.id}"
   count = "${var.number_of_aws_availability_zones_to_use > 2 ? 1 : 0}"
-  ami = "${data.aws_ami.coreos.id}"
+  ami = "${data.aws_ami.ubuntu.id}"
   availability_zone = "${format("%sc", var.aws_region)}" 
   instance_type = "${var.aws_ec2_instance_size}"
   key_name = "${var.aws_environment_name}"
