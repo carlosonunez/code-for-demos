@@ -38,7 +38,6 @@ resource "aws_route_table_association" "management_to_inet_route" {
   route_table_id = "${aws_route_table.vpc_route_table.id}"
 }
 
-
 resource "aws_security_group" "bastion_host" {
   depends_on = ["aws_vpc.vpc"]
   name = "vpc-bastion_host-sg"
@@ -76,9 +75,9 @@ resource "aws_security_group" "all_instances" {
 
 resource "aws_instance" "bastion_host" {
   depends_on = [
-    "aws_security_group.all_instances",
+    "aws_security_group.bastion_host",
     "data.aws_ami.coreos",
-    "aws_subnet.management"
+    "aws_subnet.management",
   ]
   associate_public_ip_address = true
   subnet_id = "${aws_subnet.management.id}"
