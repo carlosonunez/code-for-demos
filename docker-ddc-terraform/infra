@@ -82,8 +82,10 @@ then
     grep '<')"
   if [ "$unsaved_local_tfvars_changes" != "" ]
   then
+    rm 'terraform.tfvars.new'
     echo "ERROR: You have unsaved changes to your local Terraform tfvars. \
 Please upload them before running this script again."
+    exit 1
   else
     rm 'terraform.tfvars'
     mv 'terraform.tfvars.new' 'terraform.tfvars'
