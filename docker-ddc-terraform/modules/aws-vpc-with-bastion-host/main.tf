@@ -7,6 +7,14 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+resource "aws_subnet" "management" {
+  depends_on = [
+    "aws_vpc.vpc" 
+  ]
+  vpc_id = "${aws_vpc.vpc.id}"
+  cidr_block = "${var.management_subnet_cidr_block}"
+}
+
 resource "aws_internet_gateway" "vpc_internet_gateway" {
   vpc_id = "${aws_vpc.vpc.id}"
   tags = {
@@ -24,6 +32,12 @@ resource "aws_route_table" "vpc_route_table" {
     Environment = "${var.aws_environment_name}"
   }
 }
+
+resource "aws_route_table_association" "management_to_inet_route" {
+  subnet_id = "${aws_subnet.management.id}"
+  route_table_id = "${aws_route_table.vpc_route_table.id}"
+}
+
 
 resource "aws_security_group" "bastion_host" {
   depends_on = ["aws_vpc.vpc"]
@@ -59,13 +73,6 @@ resource "aws_security_group" "all_instances" {
   }
 }
 
-resource "aws_subnet" "management" {
-  depends_on = [
-    "aws_vpc.vpc" 
-  ]
-  vpc_id = "${aws_vpc.vpc.id}"
-  cidr_block = "${var.management_subnet_cidr_block}"
-}
 
 resource "aws_instance" "bastion_host" {
   depends_on = [
