@@ -97,7 +97,9 @@ Please upload them before running this again."
   fi 
 fi
 
-terraform init && \
+terraform init --backend-config "bucket=$S3_INFRASTRUCTURE_BUCKET" \
+  --backend-config "key=tfstate/$TARGET_ENVIRONMENT" \
+  --backend-config "region=$our_current_region" && \
 terraform get && \
 terraform $1 -var "aws_region=$our_current_region" \
   -var "terraform_deployer_ip=$our_current_ip" "${@:2}"
