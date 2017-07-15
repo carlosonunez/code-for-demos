@@ -102,4 +102,6 @@ terraform init --backend-config "bucket=$S3_INFRASTRUCTURE_BUCKET" \
   --backend-config "region=$our_current_region" && \
 terraform get && \
 terraform $1 -var "aws_region=$our_current_region" \
-  -var "terraform_deployer_ip=$our_current_ip" "${@:2}"
+  -var "terraform_deployer_ip=$our_current_ip" \
+  -var "aws_s3_infrastructure_bucket=$S3_INFRASTRUCTURE_BUCKET" \
+  "${@:2}"

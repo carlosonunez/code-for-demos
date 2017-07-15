@@ -49,7 +49,3 @@ variable "docker_ucp_worker_subnet_cidr_block_list" {
 variable "aws_ec2_private_key_location" {
   description = "The *absolute* location to the private key to use for logging into these servers."
 }
-
-variable "aws_s3_infrastructure_bucket" {
-  description = "The S3 bucket to store Terraform state into."
-}
