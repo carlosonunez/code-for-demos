@@ -65,11 +65,14 @@ then
 fi
 
 terraform_tfvars_remote_path="s3://$S3_INFRASTRUCTURE_BUCKET/tfvars/$TARGET_ENVIRONMENT/terraform.tfvars"
-terraform_tfvars_fetch_result="$(aws s3 cp $terraform_tfvars_remote_path \
-  'terraform.tfvars.new' 2>/dev/null; echo $?)"
-if [ "$terraform_tfvars_fetch_result" != "0" ]
+terraform_tfvars_fetch_errors="$(\
+  aws s3 cp $terraform_tfvars_remote_path 'terraform.tfvars.new' 1>/dev/null
+)"
+if [ ! -f 'terraform.tfvars.new' ]
 then
   echo "ERROR: Could not fetch $terraform_tfvars_remote_path"
+  echo "Errors from aws follow:"
+  echo $terraform_tfvars_fetch_errors
   exit 1
 fi
 
