@@ -118,6 +118,12 @@ resource "aws_instance" "bastion_host" {
     source = "files/ssh_config"
     destination = "$HOME/.ssh/config"
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 700 $HOME/.ssh/environment_private_key"
+    ]
+  }
 }
 
 resource "aws_route53_record" "bastion_host" {
