@@ -27,3 +27,53 @@ variable "aws_region" {
 variable "aws_environment_name" {
   description = "The name of the environment into which this cluster will be deployed."
 }
+
+variable "load_balancer_number_of_checks_until_healthy" {
+  description = "The number of checks before the instance is declared healthy."
+  default = 3
+}
+
+variable "load_balancer_number_of_checks_until_not_healthy" {
+  description = "The number of checks before the instance is declared unhealthy."
+  default = 3
+}
+
+variable "load_balancer_target" {
+  description = "The load balancer target path. See here for more details on the formatting: https://www.terraform.io/docs/providers/aws/r/elb.html"
+  default = "HTTPS:443/_ping"
+}
+
+variable "load_balancer_origin_port" {
+  description = "The port on the instances backed by this load balancer to direct traffic to."
+  default = 443
+}
+
+variable "load_balancer_origin_protocol" {
+  description = "The protocol being served by these backed instances."
+  default = "https"
+}
+
+variable "load_balancer_listening_port" {
+  description = "The port that this load balancer will listen on."
+  default = 443
+}
+
+variable "load_balancer_listening_protocol" {
+  description = "The protocol that this load balancer will listen on."
+  default = "http"
+}
+
+variable "load_balancer_health_check_interval_in_seconds" {
+  description = "The amount of time (in seconds) to wait between health checks."
+  default = 15
+}
+
+variable "load_balancer_health_check_timeout_in_seconds" {
+  description = "The amount of time (in seconds) to wait until the health check times out."
+  default = 5
+}
+
+variable "subnet_cidr_block_list" {
+  type = "list"
+  description = "A list of CIDR block to use for the subnet created for Docker UCP managers. The subnets chosen for each availability zone are selected based on their positions within the list, i.e. the subnet for ${REGION}a will be the first element of this list."
+}

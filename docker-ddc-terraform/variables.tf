@@ -31,3 +31,21 @@ variable "terraform_deployer_ip" {
 variable "aws_region" {
   description = "The region to deploy to."
 }
+
+variable "management_subnet_cidr_block" {
+  description = "The CIDR block to use for the management subnet."
+}
+
+variable "docker_ucp_manager_subnet_cidr_block_list" {
+  type = "list"
+  description = "A list of CIDR blocks to use for Docker UCP managers (one for each subnet being deployed to)."
+}
+
+variable "docker_ucp_worker_subnet_cidr_block_list" {
+  type = "list"
+  description = "A list of The CIDR blocks to use for Docker UCP workers (one for each subnet being deployed to)."
+}
+
+variable "aws_ec2_private_key_location" {
+  description = "The *absolute* location to the private key to use for logging into these servers."
+}
