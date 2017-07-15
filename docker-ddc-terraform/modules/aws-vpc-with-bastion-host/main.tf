@@ -121,8 +121,7 @@ resource "aws_instance" "bastion_host" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod 700 $HOME/.ssh/environment_private_key",
-      "chmod 700 $HOME/.ssh/config"
+      "chmod 700 $HOME/.ssh/environment_private_key"
     ]
   }
 }
