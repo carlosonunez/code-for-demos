@@ -104,6 +104,12 @@ resource "aws_instance" "bastion_host" {
   }
 
   provisioner "file" {
+    connection {
+      type = "ssh"
+      user = "core"
+      private_key = "${var.aws_ec2_private_key_location}"
+      agent = false
+    }
     source = "${var.aws_ec2_private_key_location}"
     destination = "$HOME/.ssh/environment_private_key"
   }
