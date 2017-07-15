@@ -5,6 +5,24 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+resource "aws_internet_gateway" "vpc_internet_gateway" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  tags = {
+    Environment = "${var.aws_environment_name}"
+  }
+}
+
+resource "aws_route_table" "vpc_route_table" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.vpc_internet_gateway}"
+  }
+  tags = {
+    Environment = "${var.aws_environment_name}"
+  }
+}
+
 resource "aws_security_group" "bastion_host" {
   depends_on = ["aws_vpc.vpc"]
   name = "vpc-bastion_host-sg"
