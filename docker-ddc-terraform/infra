@@ -9,12 +9,15 @@ NOTE: S3_INFRASTRUCTURE_BUCKET must be defined for your environment. Set it to t
 
 NOTE: TARGET_ENVIRONMENT also needs to be set to the environment you wish to deploy.
 
+NOTE: DOCKER_EE_REPO_URL must be defined as well.
+
 NOTE: awscli must be installed. Install it with "pip install awscli".
 
 EOF
 }
 
-our_current_ip=$(curl -Ls http://canihazip.com/s | cut -f1 -d, | tr -d ' ')
+
+our_current_ip=$(curl -Ls https://api.ipify.org)
 our_current_region=$AWS_REGION
 
 if [ "$1" == "" ]
@@ -50,6 +53,13 @@ before running this script."
   exit 1
 fi
 
+if [ "${DOCKER_EE_REPO_URL}" == "" ]
+then
+  usage
+  echo "ERROR: You must set your Docker EE repo URL with DOCKER_EE_REPO_URL."
+  exit 1
+fi
+
 if [ "$(which aws)" == "" ]
 then
   usage
@@ -64,38 +74,45 @@ then
   exit 1
 fi
 
-terraform_tfvars_remote_path="s3://$S3_INFRASTRUCTURE_BUCKET/tfvars/$TARGET_ENVIRONMENT/terraform.tfvars"
-terraform_tfvars_fetch_errors="$(\
-  aws s3 cp $terraform_tfvars_remote_path 'terraform.tfvars.new' 1>/dev/null
-)"
-if [ ! -f 'terraform.tfvars.new' ]
-then
-  echo "ERROR: Could not fetch $terraform_tfvars_remote_path"
-  echo "Errors from aws follow:"
-  echo $terraform_tfvars_fetch_errors
-  exit 1
-fi
-
-if [ -f "terraform.tfvars" ]
-then
-  unsaved_local_tfvars_changes="$(diff 'terraform.tfvars' 'terraform.tfvars.new' | \
-    grep '<')"
-  if [ "$unsaved_local_tfvars_changes" != "" ]
+for s3_file in "tfvars/$TARGET_ENVIRONMENT/terraform.tfvars" \
+"ansible_vars/$TARGET_ENVIRONMENT/secret_vars.yml" \
+"licenses/$TARGET_ENVIRONMENT/docker_subscription.lic"
+do
+  s3_file_name="$(echo ${s3_file} | rev | cut -f1 -d '/' | rev)"
+  s3_file_name_tmp="${s3_file_name}.new"
+  s3_file_remote_path="s3://$S3_INFRASTRUCTURE_BUCKET/$s3_file"
+  s3_file_fetch_errors="$(\
+    aws s3 cp $s3_file_remote_path $s3_file_name_tmp 1>/dev/null
+  )"
+  if [ ! -f $s3_file_name_tmp ]
   then
-    command_to_run="aws s3 cp terraform.tfvars $terraform_tfvars_remote_path"
-    rm 'terraform.tfvars.new'
-    echo "ERROR: You have unsaved changes to your local Terraform tfvars. \
-Please upload them before running this again."
-    echo ""
-    echo "To do that, run the following command:"
-    echo ""
-    echo $command_to_run
+    echo "ERROR: Could not fetch $s3_file_remote_path"
+    echo "Errors from aws follow:"
+    echo $s3_file_fetch_errors
     exit 1
-  else
-    rm 'terraform.tfvars'
-    mv 'terraform.tfvars.new' 'terraform.tfvars'
-  fi 
-fi
+  fi
+
+  if [ -f $s3_file_name ]
+  then
+    unsaved_local_s3_changes="$(diff $s3_file_name $s3_file_name_tmp | \
+      grep '<')"
+    if [ "$unsaved_local_s3_changes" != "" ]
+    then
+      command_to_run="aws s3 cp $s3_file $s3_file_remote_path"
+      rm 'terraform.tfvars.new'
+      echo "ERROR: You have unsaved changes to this file [$s3_file]. This file is \
+sensitive and backed up into S3. Please resync this file before running this again."
+      echo ""
+      echo "To do that, run the following command:"
+      echo ""
+      echo $command_to_run
+      exit 1
+    else
+      rm $s3_file_name
+      mv $s3_file_name_tmp $s3_file_name
+    fi 
+  fi
+done
 
 terraform init --backend-config "bucket=$S3_INFRASTRUCTURE_BUCKET" \
   --backend-config "key=tfstate/$TARGET_ENVIRONMENT" \
@@ -104,4 +121,5 @@ terraform get && \
 terraform $1 -var "aws_region=$our_current_region" \
   -var "terraform_deployer_ip=$our_current_ip" \
   -var "aws_s3_infrastructure_bucket=$S3_INFRASTRUCTURE_BUCKET" \
+  -var "docker_ee_repo_url=$DOCKER_EE_REPO_URL" \
   "${@:2}"

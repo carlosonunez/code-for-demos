@@ -50,7 +50,7 @@ variable "load_balancer_origin_port" {
 
 variable "load_balancer_origin_protocol" {
   description = "The protocol being served by these backed instances."
-  default = "tcp"
+  default = "https"
 }
 
 variable "load_balancer_listening_port" {
@@ -60,17 +60,7 @@ variable "load_balancer_listening_port" {
 
 variable "load_balancer_listening_protocol" {
   description = "The protocol that this load balancer will listen on."
-  default = "tcp"
-}
-
-variable "load_balancer_health_check_interval_in_seconds" {
-  description = "The amount of time (in seconds) to wait between health checks."
-  default = 15
-}
-
-variable "load_balancer_health_check_timeout_in_seconds" {
-  description = "The amount of time (in seconds) to wait until the health check times out."
-  default = 5
+  default = "http"
 }
 
 variable "subnet_cidr_block_list" {
@@ -88,4 +78,24 @@ variable "docker_ee_repo_url" {
 
 variable "aws_vpc_route_table_id" {
   description = "The route table to which the subnet for UCP managers will be associated."
+}
+
+variable "docker_swarm_leader_ip" {
+  description = "The IP address belonging to the leader of this Swarm. For this stack, this is the IP of the first manager created."
+}
+
+variable "number_of_workers_per_az" {
+  description = "The number of workers to deploy per availablility zone."
+}
+
+variable "docker_ucp_security_group_id" {
+  description = "The security group ID for ucp instances."
+}
+
+variable "ucp_manager_lb_security_group" {
+  description = "The security group ID for our UCP manager cluster. This is needed to give our load balancer inbound access to our cluster without creating another security group."
+}
+
+variable "ucp_manager_elb_id" {
+  description = "The ID of the manager ELB to attach our workers to. This is done to allow us to access services hosted by the cluster using one DNS address."
 }

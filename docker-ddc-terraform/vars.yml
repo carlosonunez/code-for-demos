@@ -1,0 +1,5 @@
+docker_ee_version: stable-17.03
+docker_ubuntu_version: xenial
+docker_manager_ucp_image: docker/ucp:2.1.4
+docker_ucp_license_location: docker_subscription.lic
+ucp_load_balancer_dns_record: ucp.sandbox.carlosnunez.me

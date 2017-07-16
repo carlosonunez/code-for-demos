@@ -80,15 +80,8 @@ resource "aws_security_group" "all_instances" {
 
 
 resource "aws_instance" "bastion_host" {
-  connection {
-    type = "ssh"
-    user = "core"
-    private_key = "${file("${var.aws_ec2_private_key_location}")}"
-    agent = false
-  }
   depends_on = [
     "aws_security_group.bastion_host",
-    "data.aws_ami.coreos",
     "aws_subnet.management",
   ]
   associate_public_ip_address = true
@@ -96,7 +89,7 @@ resource "aws_instance" "bastion_host" {
   ami = "${data.aws_ami.coreos.id}"
   instance_type = "t2.micro"
   key_name = "${var.aws_environment_name}"
-  security_groups = [
+  vpc_security_group_ids = [
     "${aws_security_group.bastion_host.id}"
   ]
   tags = {
@@ -108,21 +101,20 @@ resource "aws_instance" "bastion_host" {
     volume_size = 8
     delete_on_termination = true
   }
+}
 
-  provisioner "file" {
-    source = "${var.aws_ec2_private_key_location}"
-    destination = "$HOME/.ssh/environment_private_key"
+resource "null_resource" "provision_bastion_host" {
+  triggers {
+    bastion_host_changes = "${aws_instance.bastion_host.id}"
   }
-
-  provisioner "file" {
-    source = "files/ssh_config"
-    destination = "$HOME/.ssh/config"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod 700 $HOME/.ssh/environment_private_key"
-    ]
+  provisioner "local-exec" {
+    command = <<EOF
+ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook \
+  --private-key ${var.aws_ec2_private_key_location} \
+  -i ${aws_instance.bastion_host.public_ip}, \
+  -e private_key_location=${var.aws_ec2_private_key_location} \
+  bastion-host-playbook.yml
+EOF
   }
 }
 

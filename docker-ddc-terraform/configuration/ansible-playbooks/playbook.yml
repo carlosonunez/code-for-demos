@@ -1,0 +1,4 @@
+---
+- hosts: docker-ucp-manager
+  roles:
+    - docker-ucp-manager
