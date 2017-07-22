@@ -1,0 +1,7 @@
+- Have each instance clone this repository and run Ansible remotely.
+  * Imposes less load on the instance running terraform (i.e. my laptop)
+  * Yields faster deployment times.
+
+- Have each module be in their own repository.
+  * Makes it easier to reuse stuff for multiple Terraform configurations.
+  * Can develop modules outside of configuration cycle.

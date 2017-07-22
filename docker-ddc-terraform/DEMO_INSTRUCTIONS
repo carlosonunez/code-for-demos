@@ -1,0 +1,141 @@
+ERRATA
+======
+1. When deploying your Wordpress application, you will need to create a load
+   balancer manually and associate all of your workers with it. (I didn't want
+   to spend more time mucking with Terraform; I only had a few hours before demo!)
+
+   Our `ucp-cluster` security group already makes 8080 open to the load balancer;
+   all you need to do is associate them.
+
+Here's what you need to demonstrate
+===================================
+
+1. This repository's folder hierarchy.
+  * Notable files: {main, output, variables, data, config}.tf
+    - main.tf: Where everything happens! Your resources, module declarations and other pertinent resources for your play go here.
+    - output.tf: Outputs from your configuration, such as DNS record labels and instance names, should be defiend here.
+    - variables.tf: Variables to be used by main and defined by terraform.tfvars go here.
+    - data.tf: Any data sources (i.e. AMI lookups, remote state configurations, etc.) should go here.
+    - config.tf: Any configuration parameters given to Terraform in a `terraform {}` block should go here.
+  * Notable directories: {modules}
+    - This is where modules live.
+    - You can also move these modules into their own repositories.
+      * Can develop modules out of band relative to your infrastructure configuration
+      * Can reuse them in other configurations
+      * Can share your work with the world and get tons of Github stars
+
+2. What can Terraform do?
+  a. If we run `terraform`, we get output like what's shown in Appendix A.
+		i. This is recent as of 0.9.11; your output might differ if your version is different.
+	b. That's a lot of stuff! What we'll look into in depth today is:
+    i. `plan`
+    ii. `apply`
+    iii. `destroy`
+    iv. `state`
+
+3. The Terraform plan.
+  a. Since we're starting from scratch, let's write our resource for deploying a VPC.
+```
+variable "aws_vpc_cidr_block" {
+  description = "The CIDR block for our VPC."
+}
+
+resource "aws_vpc" "vpc" {
+  enable_dns_support = true
+  enable_dns_hostnames = true
+  cidr_block = "${var.aws_vpc_cidr_block}"
+  tags = {
+    Environment = "${var.aws_environment_name}"
+  }
+}
+
+output "aws_vpc_id" {
+  value = "${aws_vpc.vpc.id}"
+}
+```
+  b. The anatomy of this resource;
+    i. `variable "aws_vpc_cidr_block"`
+      1. This is a variable!
+      2. They can be set one of two ways:
+        a. With a `default` parameter (i.e. `default = 10.1.0.0/16`)
+        b. Within `terraform.tfvars` or any other `tfvars` file
+      2. You can specify the following:
+        a. The data type the variable should be: `string`, `map` or `list`
+        b. A short description describing what it is.
+          i. This is shown to you when you forgot to define the variable during
+             a `terraform plan` run.
+    ii. `resource "aws_vpc"`
+      1. This is telling Terraform "I want to deploy an `aws_vpc` object called "vpc".
+      2. Where is this object defined? Providers!
+        a. "Providers" are the glue that turns resources into infrastructure.
+        b. Each line inside of a resource is an argument to functions exposed by them.
+        c. If this were C#, you can translate this into:
+
+        ```
+        public static AwsVpcResource Create(boolean enableDnsSupport,
+                                            boolean enableDnsHostnames,
+                                            string cidrBlock,
+                                            Hashtable<string,string> tags) {
+          // do AWS stuff
+        }
+        ```
+      3. The outputs (attributes) from that resource get committed into a huge graph.
+        a. You can see this graph by running `terraform graph`
+        b. You can make those outputs accessible to other resources with the
+           `output` resource; we'll look at that later.
+    ii. `enable_dns_hostnames`, `enable_dns_support`
+      1. These are our `resource` "arguments" as we explained earlier.
+    iii. "${var.aws_vpc_cidr_block}"
+      1. This is called an "interpolation".
+      2. These enable you to access outputs and variables created within our configuration.
+      3. The `var` keyword indicates that this is a variable.
+    iv. `output`
+      1. This is an output that is shown to you after your Terraform apply run completes.
+      2. You can use this in scripts, in other resources or for your reference.
+      3. These outputs are also managed by the Terraform tfstate.
+
+4. What happens when we run `terraform plan`?
+  a. Syntax checking is done (You can run `terraform validate` to ensure that your syntax is correct)
+  b. Variables are collected, either from your `tfvars` file or from standard input.
+  c. If you have any `data` resources, they are executed to collect data that's shown in your plan.
+  d. Your plan is displayed!
+
+
+Appendix A: Output from `terraform`
+===================================
+
+```
+[2017-07-18 16:16:35 carlosnunez@DESKTOP-RHPB7LP <<dev>> docker-ddc-terraform] $: terraform
+Usage: terraform [--version] [--help] <command> [args]
+
+The available commands for execution are listed below.
+The most common, useful commands are shown first, followed by
+less common or more advanced commands. If you're just getting
+started with Terraform, stick with the common commands. For the
+other commands, please read the help and docs before usage.
+
+Common commands:
+    apply              Builds or changes infrastructure
+    console            Interactive console for Terraform interpolations
+    destroy            Destroy Terraform-managed infrastructure
+    env                Environment management
+    fmt                Rewrites config files to canonical format
+    get                Download and install modules for the configuration
+    graph              Create a visual graph of Terraform resources
+    import             Import existing infrastructure into Terraform
+    init               Initialize a new or existing Terraform configuration
+    output             Read an output from a state file
+    plan               Generate and show an execution plan
+    push               Upload this Terraform module to Atlas to run
+    refresh            Update local state file against real resources
+    show               Inspect Terraform state or plan
+    taint              Manually mark a resource for recreation
+    untaint            Manually unmark a resource as tainted
+    validate           Validates the Terraform files
+    version            Prints the Terraform version
+
+All other commands:
+    debug              Debug output management (experimental)
+    force-unlock       Manually unlock the terraform state
+    state              Advanced state management
+```

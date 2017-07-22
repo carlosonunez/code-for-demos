@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: no
+  remote_user: core
+  pre_tasks:
+    - name: Wait for SSH to become available for the next five minutes.
+      local_action:
+        module: wait_for
+        host: "{{ inventory_hostname }}"
+        port: 22
+        timeout: 270
+        state: started
+  tasks:
+  - name: Copy SSH prerequisites.
+    local_action: shell scp -i {{ private_key_location }} {{ item.source }} core@{{ inventory_hostname }}:{{ item.destination }}
+    with_items:
+      - { source: "{{ private_key_location }}", destination: "~/.ssh/environment_private_key" }
+      - { source: files/bastion_host_ssh_config, destination: ~/.ssh/config }
+
+  - name: Change our private key to the correct mode.
+    raw: "chmod 700 ~/.ssh/environment_private_key"

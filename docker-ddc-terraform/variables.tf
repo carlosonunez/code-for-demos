@@ -24,6 +24,10 @@ variable "ucp_manager_instance_size" {
   description = "The size to use for our UCP managers."
 }
 
+variable "ucp_worker_instance_size" {
+  description = "The size to use for our UCP workers."
+}
+
 variable "terraform_deployer_ip" {
   description = "The *public* IP address for the machine that is running this Terraform configuration."
 }
@@ -52,4 +56,12 @@ variable "aws_ec2_private_key_location" {
 
 variable "aws_s3_infrastructure_bucket" {
   description = "The location of our infrastructure state and tfvars witihin S3."
+}
+
+variable "docker_ee_repo_url" {
+  description = "The URL to your licensed Docker EE repository."
+}
+
+variable "number_of_workers_per_az" {
+  description = "The number of workers to deploy per AZ."
 }

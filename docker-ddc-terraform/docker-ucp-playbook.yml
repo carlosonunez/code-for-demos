@@ -1,0 +1,175 @@
+- hosts: all
+  gather_facts: no
+  become: true
+  remote_user: ubuntu
+  vars_files:
+    - vars.yml
+    - secret_vars.yml
+  pre_tasks:
+    - name: Wait for SSH to become available for the next five minutes (+30 seconds to wait for the SSH daemon to come up.)
+      local_action:
+        module: wait_for
+        host: "{{ inventory_hostname }}"
+        port: 22
+        delay: 30
+        timeout: 270
+        state: started
+
+    - name: Install Python 2.x so that Ansible will work.
+      raw: sudo apt-get -y install python-simplejson
+
+  handlers:
+  - name: Update the APT cache.
+    apt:
+      update_cache: yes
+
+  tasks:
+  - name: Copy our Docker UCP license to the host.
+    file:
+      state: directory
+      path: /config
+
+  - copy:
+      src: "{{ docker_ucp_license_location }}"
+      dest: /config/docker_subscription.lic
+
+  - name: Get our host's local IP address.
+    shell: hostname --ip-address
+    register: ip_query_command_result
+    failed_when: ip_query_command_result.stdout == "" or ip_query_command_result.rc != 0
+
+  - set_fact:
+      private_ip_address: "{{ ip_query_command_result.stdout }}"
+
+  - name: Clear any existing APT sources present.
+    file:
+      state: "{{ item }}"
+      path: /etc/apt/sources.list.d
+    notify: "Update the APT cache."
+    with_items:
+      - absent
+      - directory
+
+  - name: Install the APT key for our Docker EE repo.
+    apt_key:
+      url: "{{ docker_ee_repo_url }}/gpg"
+      state: present
+
+  - name: Add our Docker EE repository.
+    apt_repository:
+      repo: "deb {{ docker_ee_repo_url }} {{ docker_ubuntu_version }} {{ docker_ee_version }}"
+      state: present
+    notify: "Update the APT cache."
+
+  - name: Install Docker EE and dependencies.
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python-setuptools
+      - docker-ee
+
+  - name: Install pip.
+    easy_install:
+      name: pip
+      state: latest
+
+  - name: Install docker-py.
+    pip:
+      name: docker-py
+      state: present
+
+
+  - name: Run Docker UCP container.
+    when: ucp_role == "manager" and is_primary_node == "true"
+    become: true
+    become_method: sudo
+    docker_container:
+      interactive: true
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /config/docker_subscription.lic:/config/docker_subscription.lic
+      name: ucp
+      image: "{{ docker_manager_ucp_image }}"
+      detach: false
+      command: >
+        install --admin-username "{{ docker_ucp_admin_username }}"
+        --admin-password "{{ docker_ucp_admin_password }}"
+        --host-address "{{ private_ip_address }}"
+        --disable-usage
+        --registry-username "{{ docker_hub_registry_username }}"
+        --registry-password "{{ docker_hub_registry_password }}"
+        --san "{{ private_ip_address }}"
+        --san "{{ inventory_hostname }}"
+        --san "{{ ucp_load_balancer_dns_record }}"
+
+  - name: Confirm that Docker UCP is running on this host.
+    when: ucp_role == "manager" and is_primary_node == "true"
+    become: true
+    become_method: sudo
+    shell: docker ps | grep -q ucp
+    register: docker_container_output_result
+    failed_when: docker_container_output_result.rc != 0
+
+  - debug:
+      msg: "We're waiting for: /tmp/docker_{{ ucp_role }}_swarm_token_{{ private_ip_address.split('.') | join('-') }}"
+
+  - name: Persist the Swarm manager and worker tokens to a file.
+    when: ucp_role == "manager" and is_primary_node == "true"
+    register: command_result
+    shell: "docker swarm join-token {{ item }} -q >  /tmp/docker_{{ item }}_swarm_token_{{ private_ip_address.split('.') | join('-') }}"
+    failed_when: command_result.rc != 0
+    with_items:
+      - manager
+      - worker
+
+  - name: Retrieve our Swarm tokens.
+    when: ucp_role == "manager" and is_primary_node == "true"
+    fetch:
+      src: "/tmp/docker_{{ item }}_swarm_token_{{ private_ip_address.split('.') | join('-') }}"
+      dest: "/tmp/docker_{{ item }}_swarm_token_{{ private_ip_address.split('.') | join('-') }}"
+      flat: yes
+    with_items:
+      - manager
+      - worker
+
+  - name: Wait for Swarm tokens to show up.
+    when: is_primary_node == "false"
+    local_action: "wait_for timeout=180 path=/tmp/docker_{{ ucp_role }}_swarm_token_{{ docker_ucp_swarm_leader.split('.') | join('-') }}"
+
+
+  - name: Copy our tokens over to our remote.
+    when: is_primary_node == "false"
+    copy:
+      src: "/tmp/docker_{{ ucp_role }}_swarm_token_{{ docker_ucp_swarm_leader.split('.') | join('-') }}"
+      dest: "/tmp/docker_{{ ucp_role }}_swarm_token_{{ docker_ucp_swarm_leader.split('.') | join('-') }}"
+
+  - name: Retrieve our leader's Swarm manager token.
+    when: ucp_role == "manager" and is_primary_node == "false"
+    register: command_result
+    shell: cat "/tmp/docker_manager_swarm_token_{{ docker_ucp_swarm_leader.split('.') | join('-') }}"
+    
+  - set_fact:
+      ucp_manager_token: "{{ command_result.stdout }}"
+    when: ucp_role == "manager" and is_primary_node == "false"
+
+  - name: Retrieve our leader's Swarm worker token.
+    when: ucp_role == "worker"
+    register: command_result
+    shell: cat "/tmp/docker_worker_swarm_token_{{ docker_ucp_swarm_leader.split('.') | join('-') }}"
+    
+  - set_fact:
+      ucp_worker_token: "{{ command_result.stdout }}"
+    when: ucp_role == "worker"
+
+  - name: Join the Swarm as a manager.
+    when: ucp_role == "manager" and is_primary_node == "false"
+    shell: "sudo docker swarm join --token {{ ucp_manager_token }} {{ docker_ucp_swarm_leader }}:2377"
+
+  - name: Join the Swarm as a worker.
+    when: ucp_role == "worker"
+    shell: "sudo docker swarm join --token {{ ucp_worker_token }} {{ docker_ucp_swarm_leader }}:2377"
