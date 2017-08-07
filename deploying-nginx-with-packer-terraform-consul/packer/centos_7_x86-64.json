@@ -1,0 +1,40 @@
+{
+  "description": "Basic NGINX on CentOS.",
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "aws_region": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{ user `aws_access_key` }}",
+      "secret_key": "{{ user `aws_secret_key` }}",
+      "region": "{{ user `region` }}",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "centos-7-nginx-demo",
+      "source_ami_filter": {
+        "owners": ["410186602215"],
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "CentOS Linux 7 x86_64",
+          "root-device-type": "ebs"
+        },
+        "most_recent": "true"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "chef-solo",
+      "cookbook_paths": ["cookbooks"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "inline": [ "echo 'This is an example of a post-processing step. The image has been built and provisioned by this point.' " ]
+    }
+  ]
+}
