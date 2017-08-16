@@ -3,11 +3,13 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
-    "aws_region": ""
+    "aws_region": "",
+    "vpc_id": ""
   },
   "builders": [
     {
       "type": "amazon-ebs",
+      "vpc_id": "{{ user `vpc_id` }}",
       "access_key": "{{ user `aws_access_key` }}",
       "secret_key": "{{ user `aws_secret_key` }}",
       "region": "{{ user `region` }}",
