@@ -13,3 +13,13 @@ variable "cidr_block" {
 variable "aws_environment" {
   description = "The environment this subnet belongs to."
 }
+
+variable "enable_internet_access" {
+  description = "Create a route table for this subnet that enables outbound access."
+  default     = false
+}
+
+variable "aws_internet_gateway_id" {
+  description = "The ID of the internet gateway to use for when 'enable_internet_access' is enabled."
+  default     = ""
+}
