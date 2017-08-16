@@ -18,7 +18,7 @@
         "owners": ["410186602215"],
         "filters": {
           "virtualization-type": "hvm",
-          "name": "CentOS Linux 7 x86_64",
+          "name": "CentOS Linux 7 x86_64*",
           "root-device-type": "ebs"
         },
         "most_recent": "true"
