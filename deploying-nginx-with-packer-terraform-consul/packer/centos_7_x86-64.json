@@ -19,7 +19,7 @@
       "instance_type": "t2.micro",
       "associate_public_ip_address": "true",
       "ami_virtualization_type": "hvm",
-      "ssh_username": "ubuntu",
+      "ssh_username": "centos",
       "ami_name": "centos-7-nginx-demo",
       "source_ami_filter": {
         "owners": ["410186602215"],
