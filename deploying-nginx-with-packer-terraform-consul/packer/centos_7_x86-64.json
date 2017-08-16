@@ -1,10 +1,11 @@
 {
   "description": "Basic NGINX on CentOS.",
   "variables": {
-    "aws_access_key": "",
-    "aws_secret_key": "",
-    "aws_region": "",
-    "vpc_id": ""
+    "aws_access_key": null,
+    "aws_secret_key": null,
+    "aws_region": null,
+    "vpc_id": null,
+    "environment": null
   },
   "builders": [
     {
@@ -12,8 +13,10 @@
       "vpc_id": "{{ user `vpc_id` }}",
       "access_key": "{{ user `aws_access_key` }}",
       "secret_key": "{{ user `aws_secret_key` }}",
-      "region": "{{ user `region` }}",
+      "region": "{{ user `aws_region` }}",
       "instance_type": "t2.micro",
+      "associate_public_ip_address": "true",
+      "ami_virtualization_type": "hvm",
       "ssh_username": "ubuntu",
       "ami_name": "centos-7-nginx-demo",
       "source_ami_filter": {
