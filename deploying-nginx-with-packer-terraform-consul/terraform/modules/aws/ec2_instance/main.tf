@@ -18,6 +18,7 @@ resource "aws_security_group" "web_servers" {
 }
 
 resource "aws_instance" "instance" {
+  count                  = "${var.count}"
   ami                    = "${var.ami_id}"
   instance_type          = "${var.instance_type}"
   vpc_security_group_ids = ["${aws_security_group.web_servers.id}"]
