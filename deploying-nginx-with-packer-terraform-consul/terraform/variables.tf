@@ -10,10 +10,6 @@ variable "aws_region" {
   description = "The AWS region in which this infrastructure will be hosted."
 }
 
-variable "instance_type" {
-  description = "The size of the EC2 instance to provision."
-}
-
 variable "aws_public_instances_subnet_cidr_block" {
   description = "The CIDR block to give to the subnet holding instances with inbound/outbound internet access."
 }
