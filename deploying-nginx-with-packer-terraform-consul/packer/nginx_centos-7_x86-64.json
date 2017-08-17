@@ -36,7 +36,7 @@
     {
       "type": "chef-solo",
       "cookbook_paths": ["cookbooks"],
-      "run_list": ["consul::default","base::default","nginx::default"]
+      "run_list": ["base::default","consul::default","nginx::default"]
     }
   ],
   "post-processors": [
