@@ -24,10 +24,10 @@ resource "aws_security_group" "web_servers_internal_communication" {
   vpc_id      = "${var.vpc_id}"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    self        = true
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true
   }
 
   egress {
@@ -39,13 +39,13 @@ resource "aws_security_group" "web_servers_internal_communication" {
 }
 
 resource "aws_instance" "instance" {
-  count                  = "${var.count}"
-  ami                    = "${var.ami_id}"
-  instance_type          = "${var.instance_type}"
-  vpc_security_group_ids = ["${aws_security_group.web_servers.id}","${aws_security_group.web_servers_internal_communication.id}"]
-  instance_type          = "${var.instance_type}"
-  key_name               = "${var.key_name}"
-  subnet_id              = "${var.subnet_id}"
+  count                       = "${var.count}"
+  ami                         = "${var.ami_id}"
+  instance_type               = "${var.instance_type}"
+  vpc_security_group_ids      = ["${aws_security_group.web_servers.id}", "${aws_security_group.web_servers_internal_communication.id}"]
+  instance_type               = "${var.instance_type}"
+  key_name                    = "${var.key_name}"
+  subnet_id                   = "${var.subnet_id}"
   associate_public_ip_address = true
 
   root_block_device {

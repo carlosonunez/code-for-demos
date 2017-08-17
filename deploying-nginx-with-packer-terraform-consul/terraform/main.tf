@@ -5,7 +5,7 @@ module "vpc" {
 }
 
 resource "aws_key_pair" "ec2_key_for_environment" {
-  key_name = "${var.environment_name}"
+  key_name   = "${var.environment_name}"
   public_key = "${var.environment_public_key}"
 }
 
