@@ -26,6 +26,7 @@ module "public_instances" {
 
 module "web_server" {
   source          = "./modules/aws/ec2_instance"
+  count           = "${var.number_of_web_servers}"
   ami_id          = "${var.web_server_ami_id}"
   instance_type   = "${var.web_server_instance_type}"
   key_name        = "${var.environment_name}"
