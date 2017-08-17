@@ -18,3 +18,7 @@ variable "number_of_web_servers" {
   description = "The number of web servers to provision. In a more real-world scenario, you might consider having these instances spread out across availability zones for redundancy."
   default = 3
 }
+
+variable "environment_public_key" {
+  description = "The public key to use for accessing instances created within this environment."
+}
