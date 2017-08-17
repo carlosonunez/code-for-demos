@@ -13,12 +13,12 @@ end
 
 execute "unzip Consul package" do
   command "unzip -d /tmp/consul /tmp/consul.zip"
-  not_if { !File.exist('/tmp/consul.zip') }
+  not_if { !File.exists?('/tmp/consul.zip') }
 end
 
 remote_file "Copy Consul package to #{node[:consul][:installation_directory]}" do
   path "/usr/local/bin/consul"
   source "file:///tmp/consul/consul"
   mode 0755
-  not_if { !File.exist('/tmp/consul/consul') }
+  not_if { !File.exists?('/tmp/consul/consul') }
 end
