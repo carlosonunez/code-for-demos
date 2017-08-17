@@ -49,7 +49,8 @@ locate_vpc_by_environment() {
   fi
 }
 
-environment_to_target="$1"
+environment_to_target="${1:?Please provide the environment to target.}"
+template="${2:?Please provide the Packer template to build from.}"
 if [ -z "$environment_to_target" ]
 then
   usage
