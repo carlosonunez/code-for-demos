@@ -4,6 +4,11 @@ module "vpc" {
   aws_environment = "${var.environment_name}"
 }
 
+resource "aws_key_pair" "ec2_key_for_environment" {
+  key_name = "${var.environment_name}"
+  public_key = "${var.environment_public_key}"
+}
+
 module "management-subnet" {
   source                  = "./modules/aws/subnet"
   subnet_name             = "management"
@@ -14,7 +19,7 @@ module "management-subnet" {
   aws_internet_gateway_id = "${module.vpc.internet_gateway_id}"
 }
 
-module "public_instances" {
+module "public_instances_subnet" {
   source                  = "./modules/aws/subnet"
   subnet_name             = "public_instances"
   vpc_id                  = "${module.vpc.vpc_id}"
@@ -31,6 +36,6 @@ module "web_server" {
   instance_type   = "${var.web_server_instance_type}"
   key_name        = "${var.environment_name}"
   vpc_id          = "${module.vpc.vpc_id}"
-  subnet_id       = "${module.public_instances.subnet_id}"
+  subnet_id       = "${module.public_instances_subnet.subnet_id}"
   aws_environment = "${var.environment_name}"
 }
