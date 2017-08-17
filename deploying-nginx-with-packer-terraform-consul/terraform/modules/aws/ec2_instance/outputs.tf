@@ -10,10 +10,6 @@ variable "key_name" {
   description = "The EC2 public key to use for logging into this instance."
 }
 
-variable "security_groups" {
-  description = "A list of security groups to assign this instance to."
-}
-
 variable "vpc_id" {
   description = "The VPC to provision this instance into."
 }
