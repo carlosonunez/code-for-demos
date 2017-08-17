@@ -1,6 +1,7 @@
 resource "aws_security_group" "web_servers" {
   name        = "${format("web_server-%s-sg",var.aws_environment)}"
   description = "Security group description for web servers. Completely open for our demo. DON'T DO THIS FOR REAL ENVIRONMENTS."
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = 0
@@ -20,6 +21,7 @@ resource "aws_security_group" "web_servers" {
 resource "aws_security_group" "web_servers_internal_communication" {
   name        = "${format("web_server_internal-%s-sg",var.aws_environment)}"
   description = "Security group description for internal communication between web servers. Completely open for our demo. DON'T DO THIS FOR REAL ENVIRONMENTS."
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = 0
