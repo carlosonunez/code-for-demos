@@ -26,5 +26,7 @@ resource "aws_instance" "instance" {
   root_block_device {
     volume_size = "${var.disk_size}"
   }
-  vpc_security_group_ids = [ "${aws_security_group.web_servers.id}" ]
+  vpc_security_group_ids = [
+    "${aws_security_group.web_servers.id}"
+  ]
 }
