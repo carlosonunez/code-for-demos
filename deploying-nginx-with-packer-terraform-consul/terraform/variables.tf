@@ -21,3 +21,8 @@ variable "instance_type" {
 variable "aws_public_instances_subnet_cidr_block" {
   description = "The CIDR block to give to the subnet holding instances with inbound/outbound internet access."
 }
+
+variable "number_of_web_servers" {
+  description = "The number of web servers to provision. In a more real-world scenario, you might consider having these instances spread out across availability zones for redundancy."
+  default = 3
+}
