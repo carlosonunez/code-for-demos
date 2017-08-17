@@ -10,10 +10,6 @@ variable "aws_region" {
   description = "The AWS region in which this infrastructure will be hosted."
 }
 
-variable "ami_id" {
-  description = "The AMI to provision this instance with."
-}
-
 variable "instance_type" {
   description = "The size of the EC2 instance to provision."
 }
