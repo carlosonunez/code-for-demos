@@ -26,3 +26,7 @@ variable "disk_size" {
   description = "The size of the disk to give this instance."
   default     = 8
 }
+
+variable "count" {
+  description = "Number of instances to provision."
+}
