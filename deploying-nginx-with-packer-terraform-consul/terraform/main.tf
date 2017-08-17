@@ -25,11 +25,11 @@ module "public_instances" {
 }
 
 module "web_server" {
-  source = "./modules/aws/ec2_instance"
-  ami_id = "${var.web_server_ami_id}"
-  instance_type = "${var.web_server_instance_type}"
-  key_name = "${var.environment_name}"
-  vpc_id = "${module.vpc.vpc_id}"
-  subnet_id = "${module.public_instances.subnet_id}"
+  source          = "./modules/aws/ec2_instance"
+  ami_id          = "${var.web_server_ami_id}"
+  instance_type   = "${var.web_server_instance_type}"
+  key_name        = "${var.environment_name}"
+  vpc_id          = "${module.vpc.vpc_id}"
+  subnet_id       = "${module.public_instances.subnet_id}"
   aws_environment = "${var.environment_name}"
 }

@@ -24,7 +24,7 @@ resource "aws_route_table" "internet_enabled_route_table" {
 }
 
 resource "aws_route_table_association" "internet_link" {
-  count  = "${var.enable_internet_access == true ? 1 : 0}"
-  subnet_id = "${aws_subnet.subnet.id}"
-  route_table_id = "${aws_route_table.internet_enabled_route_table.id}" 
+  count          = "${var.enable_internet_access == true ? 1 : 0}"
+  subnet_id      = "${aws_subnet.subnet.id}"
+  route_table_id = "${aws_route_table.internet_enabled_route_table.id}"
 }

@@ -24,7 +24,5 @@ variable "aws_environment" {
 
 variable "disk_size" {
   description = "The size of the disk to give this instance."
-  default = 8
+  default     = 8
 }
-
-
