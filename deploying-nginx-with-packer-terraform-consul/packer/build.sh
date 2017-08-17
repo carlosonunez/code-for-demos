@@ -90,4 +90,4 @@ docker run --volume "$PWD:/packer" \
     -var "vpc_id=$vpc_to_provision_image_in" \
     -var "environment=$environment_to_target" \
     -var "subnet_id=$subnet_to_provision_image_in" \
-    "centos_7_x86-64.json"
+    "$template"
