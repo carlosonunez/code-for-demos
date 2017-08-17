@@ -51,12 +51,6 @@ locate_vpc_by_environment() {
 
 environment_to_target="${1:?Please provide the environment to target.}"
 template="${2:?Please provide the Packer template to build from.}"
-if [ -z "$environment_to_target" ]
-then
-  usage
-  echo "ERROR: Please provide the environment to target." >&2
-  exit 1
-fi
 
 if [ -z "$AWS_REGION" ] ||
   [ -z "$AWS_ACCESS_KEY_ID" ] ||
