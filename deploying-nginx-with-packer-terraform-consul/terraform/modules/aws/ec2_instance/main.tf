@@ -17,11 +17,30 @@ resource "aws_security_group" "web_servers" {
   }
 }
 
+resource "aws_security_group" "web_servers_internal_communication" {
+  name        = "${format("web_server_internal-%s-sg",var.aws_environment)}"
+  description = "Security group description for internal communication between web servers. Completely open for our demo. DON'T DO THIS FOR REAL ENVIRONMENTS."
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_instance" "instance" {
   count                  = "${var.count}"
   ami                    = "${var.ami_id}"
   instance_type          = "${var.instance_type}"
-  vpc_security_group_ids = ["${aws_security_group.web_servers.id}"]
+  vpc_security_group_ids = ["${aws_security_group.web_servers.id}","${aws_security_group.web_servers_internal_communication.id}"]
   instance_type          = "${var.instance_type}"
   key_name               = "${var.key_name}"
   subnet_id              = "${var.subnet_id}"
