@@ -2,7 +2,7 @@
 # Builds this image using a Docker container (so that we don't have to
 # install packer ourselves).
 usage() {
-  echo "./build.sh <vpc_id>"
+  echo "./build.sh <template> <vpc_id> <subnet_id> "
   echo "Builds a Packer image in the environment specified."
 }
 
