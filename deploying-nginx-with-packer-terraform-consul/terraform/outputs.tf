@@ -7,9 +7,9 @@ output "ec2_key" {
 }
 
 output "consul_datacenter_addresses" {
-  value = "${module.consul_datacenter.*.public_dns_address}"
+  value = "${module.consul_datacenter.public_dns_address}"
 }
 
 output "web_server_addresses" {
-  value = "${module.web_server.*.public_dns_address}"
+  value = "${module.web_server.public_dns_address}"
 }
