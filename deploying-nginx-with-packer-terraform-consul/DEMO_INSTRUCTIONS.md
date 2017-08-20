@@ -63,3 +63,12 @@ $> ./build.sh ./nginx-centos-7-x86-64.json vpc-dfe6bfa6 subnet-ed4aabd2
 ```
 
 To destroy your temporary VPC, undo what you just did:
+
+```
+aws ec2 disassociate-route-table  --association-id rtbassoc-82a022f8
+aws ec2 delete-route-table --route-table-id rtb-db9a68a0
+aws ec2 detach-internet-gateway --internet-gateway-id igw-39aaaf5f --vpc-id vpc-dfe6bfa6
+aws ec2 delete-internet-gateway --internet-gateway-id igw-39aaaf5f
+aws ec2 delete-subnet --subnet-id subnet-ed4aabd2
+aws ec2 delete-vpc --vpc-id vpc-dfe6bfa6
+```
