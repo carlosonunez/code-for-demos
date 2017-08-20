@@ -2,14 +2,13 @@
 # Builds this image using a Docker container (so that we don't have to
 # install packer ourselves).
 usage() {
-  echo "./build.sh <environment_to_target>"
+  echo "./build.sh <vpc_id>"
   echo "Builds a Packer image in the environment specified."
 }
 
-environment_to_target="${1:?Please provide the environment to target.}"
-template="${2:?Please provide the Packer template to build from.}"
-vpc_to_provision_image_in="${3:?Please provide the VPC ID from which our temporary instance will be hosted.}"
-subnet_to_provision_image_in="${4:?Please provide the subnet ID from which our temporary instance will be hosted.}"
+template="${1:?Please provide the Packer template to build from.}"
+vpc_to_provision_image_in="${2:?Please provide the VPC ID from which our temporary instance will be hosted.}"
+subnet_to_provision_image_in="${3:?Please provide the subnet ID from which our temporary instance will be hosted.}"
 
 if [ -z "$AWS_REGION" ] ||
   [ -z "$AWS_ACCESS_KEY_ID" ] ||
@@ -28,6 +27,5 @@ docker run --volume "$PWD:/packer" \
     -var "aws_region=$AWS_REGION" \
     -var "aws_secret_key=$AWS_SECRET_ACCESS_KEY" \
     -var "vpc_id=$vpc_to_provision_image_in" \
-    -var "environment=$environment_to_target" \
     -var "subnet_id=$subnet_to_provision_image_in" \
     "$template"
