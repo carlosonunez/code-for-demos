@@ -14,7 +14,7 @@ locate_subnet_by_vpc() {
     return 0
   fi
   subnets_found=$( aws ec2 describe-subnets \
-    --filter "Name=vpc-id,Values=$vpc_id" 'Name=tag:Name,Values=management' | \
+    --filter "Name=vpc-id,Values=$vpc_id" 'Name=tag:Name,Values=packer' | \
     jq '.Subnets[].SubnetId' | \
     tr -d '"' | \
     awk 'NF'
