@@ -6,51 +6,10 @@ usage() {
   echo "Builds a Packer image in the environment specified."
 }
 
-locate_subnet_by_vpc() {
-  vpc_id="$1"
-  if [ -z "$vpc_id" ]
-  then
-    echo ""
-    return 0
-  fi
-  subnets_found=$( aws ec2 describe-subnets \
-    --filter "Name=vpc-id,Values=$vpc_id" 'Name=tag:Name,Values=packer' | \
-    jq '.Subnets[].SubnetId' | \
-    tr -d '"' | \
-    awk 'NF'
-  )
-  number_of_subnets_found=$(echo "$subnets_found" | wc -l | tr -d ' ')
-  if [ "$number_of_subnets_found" -gt 1 ]
-  then
-    echo "ERROR: Multiple management subnets found in VPC ${vpc_id}: $subnets_found" >&2
-    echo ""
-  else
-    echo "$subnets_found"
-  fi
-
-}
-
-locate_vpc_by_environment() {
-  # Uses awscli to find a VPC in a given environment.
-  environment="$1"
-  vpcs_found=$( aws ec2 describe-vpcs \
-    --filter "Name=tag:Environment,Values=$environment" | \
-    jq '.Vpcs[].VpcId' | \
-    tr -d '"' | \
-    awk 'NF'
-  )
-  number_of_vpcs_found=$(echo "$vpcs_found" | wc -l | tr -d ' ')
-  if [ "$number_of_vpcs_found" -gt 1 ]
-  then
-    echo "ERROR: Environment is ambiguous: ${environment}." >&2
-    echo ""
-  else
-    echo "$vpcs_found"
-  fi
-}
-
 environment_to_target="${1:?Please provide the environment to target.}"
 template="${2:?Please provide the Packer template to build from.}"
+vpc_to_provision_image_in="${3:?Please provide the VPC ID from which our temporary instance will be hosted.}"
+subnet_to_provision_image_in="${4:?Please provide the subnet ID from which our temporary instance will be hosted.}"
 
 if [ -z "$AWS_REGION" ] ||
   [ -z "$AWS_ACCESS_KEY_ID" ] ||
@@ -60,19 +19,6 @@ then
 are set before running this script." >&2
   echo "ERROR: What we found:" >&2
   export | grep AWS >&2
-  exit 1
-fi
-
-vpc_to_provision_image_in=$(locate_vpc_by_environment "$environment_to_target")
-if [ -z "$vpc_to_provision_image_in" ]
-then
-  echo "ERROR: VPC matching environment [$environment_to_target] not found." >&2
-  exit 1
-fi
-subnet_to_provision_image_in=$(locate_subnet_by_vpc "$vpc_to_provision_image_in")
-if [ -z "$subnet_to_provision_image_in" ]
-then
-  echo "ERROR: subnet matching environment [$environment_to_target] not found." >&2
   exit 1
 fi
 
