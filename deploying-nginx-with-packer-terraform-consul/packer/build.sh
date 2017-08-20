@@ -1,10 +1,7 @@
 #!/bin/bash
+# ./build.sh <template> <vpc_id> <subnet_id> 
 # Builds this image using a Docker container (so that we don't have to
 # install packer ourselves).
-usage() {
-  echo "./build.sh <template> <vpc_id> <subnet_id> "
-  echo "Builds a Packer image in the environment specified."
-}
 
 template="${1:?Please provide the Packer template to build from.}"
 vpc_to_provision_image_in="${2:?Please provide the VPC ID from which our temporary instance will be hosted.}"
