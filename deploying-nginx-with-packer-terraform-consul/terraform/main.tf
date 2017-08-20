@@ -33,7 +33,7 @@ module "public_instances_subnet" {
 }
 
 module "consul_datacenter" {
-  source          = "./modules/aws/ec2_instance/consul_server"
+  source          = "./modules/aws/ec2_instance/consul_datacenter"
   count           = "${var.number_of_consul_servers}"
   ami_id          = "${var.consul_server_ami_id}"
   instance_type   = "${var.consul_server_instance_type}"
