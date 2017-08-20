@@ -1,4 +1,7 @@
 module "vpc" {
+  // Ideally, modules would be in their own separate repositories to avoid needing to
+  // copy things locally. However, for this demo, we can get away with
+  // using the filesystem.
   source          = "./modules/aws/vpc"
   cidr_block      = "${var.aws_vpc_cidr_block}"
   aws_environment = "${var.environment_name}"
