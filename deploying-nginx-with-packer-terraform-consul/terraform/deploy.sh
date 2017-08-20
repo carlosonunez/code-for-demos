@@ -99,7 +99,7 @@ then
 fi
 
 case "$terraform_action" in
-  plan|apply|destroy)
+  plan|apply|destroy|refresh)
     _run_terraform_action "$terraform_action" -var "aws_s3_tfstate_bucket_name=$aws_s3_bucket" \
         -var "environment_name=$environment_to_target" \
         -var "aws_region=$AWS_REGION" \
