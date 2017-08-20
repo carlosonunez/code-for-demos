@@ -24,3 +24,27 @@ Apparently, one can download it from rubygems; I haven't tried it, however.
 
 3. `cd` into 'cookbooks', then use `knife cookbook create` to create the `base` and `nginx` 
 recipes.
+
+Deployment
+==========
+
+If you're starting from scratch, you'll need to create a VPC and subnet that can access the internet.
+
+Here is a snippet on how you can do this with awscli.
+
+```
+aws ec2 create-vpc --cidr-block "10.1.0.0/16"
+aws ec2 create-subnet --cidr-block "10.1.1.0/24" --vpc-id vpc-dfe6bfa6
+aws ec2 attach-internet-gateway --internet-gateway-id igw-39aaaf5f --vpc-id vpc-dfe6bfa6
+aws ec2 create-route-table --vpc-id vpc-dfe6bfa6
+aws ec2 create-route --gateway-id igw-39aaaf5f --route-table-id rtb-db9a68a0 --destination-cidr-block "0.0.0.0/0"
+aws ec2 associate-route-table --route-table-id rtb-db9a68a0 --subnet-id subnet-ed4aabd2
+```
+
+Once finished, deploy using `./build.sh`:
+
+```
+$> ./build.sh ./nginx-centos-7-x86-64.json vpc-dfe6bfa6 subnet-ed4aabd2
+```
+
+To destroy your temporary VPC, undo what you just did:
