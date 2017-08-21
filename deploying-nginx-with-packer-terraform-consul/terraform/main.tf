@@ -41,6 +41,7 @@ module "consul_datacenter" {
   vpc_id          = "${module.vpc.vpc_id}"
   subnet_id       = "${module.public_instances_subnet.subnet_id}"
   aws_environment = "${var.environment_name}"
+  private_key_location = "${var.private_key_location}"
 }
 
 module "web_server" {
