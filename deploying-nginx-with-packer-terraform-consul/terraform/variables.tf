@@ -22,3 +22,7 @@ variable "number_of_web_servers" {
 variable "environment_public_key" {
   description = "The public key to use for accessing instances created within this environment."
 }
+
+variable "private_key_location" {
+  description = "The location to the private key used to connect to the instance."
+}
