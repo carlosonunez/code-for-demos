@@ -30,3 +30,7 @@ variable "disk_size" {
 variable "count" {
   description = "Number of instances to provision."
 }
+
+variable "private_key_location" {
+  description = "The location to our private key on disk. This is used to connect to our provisioned instances and run provisioning steps."
+}
