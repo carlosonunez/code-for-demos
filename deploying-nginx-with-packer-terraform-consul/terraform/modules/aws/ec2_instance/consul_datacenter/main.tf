@@ -39,6 +39,11 @@ resource "aws_security_group" "consul_servers_internal_communication" {
 }
 
 resource "aws_instance" "instance" {
+  connection {
+    type = "ssh"
+    user = "centos"
+    private_key = "${file(var.private_key_location)}"
+  }
   count                       = "${var.count}"
   ami                         = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
@@ -50,5 +55,18 @@ resource "aws_instance" "instance" {
 
   root_block_device {
     volume_size = "${var.disk_size}"
+  }
+
+  // This is better done with Packer than Terraform
+  // but we are including it here to better sequence
+  // the workshop with which this demo was originally
+  // associated.
+  data "template_file" "aws_credentials_file" {
+    template = "${file("templates/aws_credentials.tmpl")}"
+    vars {
+      aws_access_key = "${var.aws_access_key}"
+      aws_secret_key = "${var.aws_secret_key}"
+      aws_region = "${var.aws_region}"
+    }  
   }
 }
