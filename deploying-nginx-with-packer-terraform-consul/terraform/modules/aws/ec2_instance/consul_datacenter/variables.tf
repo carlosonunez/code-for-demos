@@ -2,6 +2,14 @@ variable "ami_id" {
   description = "The AMI to provision this instance with."
 }
 
+variable "aws_access_key" {
+  description = "AWS access key. Used to populate Consul systemd service."
+}
+
+variable "aws_secret_key" {
+  description = "AWS secret key. Used to populate Consul systemd service."
+}
+
 variable "instance_type" {
   description = "The instance type to apply onto this EC2 instance."
 }
