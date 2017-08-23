@@ -57,8 +57,9 @@ resource "aws_instance" "instance" {
     volume_size = "${var.disk_size}"
   }
 
-  tags {
+  tags { 
     server_type = "consul_server"
+    Name = "%{format(%d.consul_server,count.index)}"
   } 
 
   // This is better done with Packer than Terraform
