@@ -77,6 +77,12 @@ resource "aws_instance" "instance" {
     Name        = "${format("%d.consul_server",count.index)}"
   }
 
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir ~/.aws"
+    ]
+  }
+
   provisioner "file" {
     content     = "${data.template_file.aws_credentials_file.rendered}"
     destination = "~/.aws/credentials"
