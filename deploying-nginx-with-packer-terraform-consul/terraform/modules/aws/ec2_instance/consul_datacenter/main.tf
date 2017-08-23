@@ -44,19 +44,21 @@ resource "aws_security_group" "consul_servers_internal_communication" {
 // associated.
 data "template_file" "aws_credentials_file" {
   template = "${file("templates/aws_credentials.tmpl")}"
+
   vars {
     aws_access_key = "${var.aws_access_key}"
     aws_secret_key = "${var.aws_secret_key}"
-    aws_region = "${var.aws_region}"
-  }  
+    aws_region     = "${var.aws_region}"
+  }
 }
 
 resource "aws_instance" "instance" {
   connection {
-    type = "ssh"
-    user = "centos"
+    type        = "ssh"
+    user        = "centos"
     private_key = "${file(var.private_key_location)}"
   }
+
   count                       = "${var.count}"
   ami                         = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
@@ -70,13 +72,13 @@ resource "aws_instance" "instance" {
     volume_size = "${var.disk_size}"
   }
 
-  tags { 
+  tags {
     server_type = "consul_server"
-    Name = "%{format(%d.consul_server,count.index)}"
-  } 
+    Name        = "%{format(%d.consul_server,count.index)}"
+  }
 
   provisioner "file" {
-    content = "${data.template_file.aws_credentials_file.rendered}"
+    content     = "${data.template_file.aws_credentials_file.rendered}"
     destination = "~/.aws/credentials"
   }
 }

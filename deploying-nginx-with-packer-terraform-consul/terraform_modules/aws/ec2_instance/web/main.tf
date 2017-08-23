@@ -54,6 +54,6 @@ resource "aws_instance" "instance" {
 
   tags {
     server_type = "web_server"
-    Name = "${format(web_server-%d, count.index)}"
+    Name        = "${format(web_server-%d, count.index)}"
   }
 }
