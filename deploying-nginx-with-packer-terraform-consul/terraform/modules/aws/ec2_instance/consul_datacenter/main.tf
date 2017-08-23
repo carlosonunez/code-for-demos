@@ -74,4 +74,9 @@ resource "aws_instance" "instance" {
       aws_region = "${var.aws_region}"
     }  
   }
+
+  provisioner "file" {
+    content = "${data.template_file.aws_credentials_file.rendered}"
+    destination = "~/.aws/credentials"
+  }
 }
