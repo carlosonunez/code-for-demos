@@ -51,4 +51,9 @@ resource "aws_instance" "instance" {
   root_block_device {
     volume_size = "${var.disk_size}"
   }
+
+  tags {
+    server_type = "web_server"
+    Name = "${format(web_server-%d, count.index)}"
+  }
 }
