@@ -57,6 +57,10 @@ resource "aws_instance" "instance" {
     volume_size = "${var.disk_size}"
   }
 
+  tags {
+    server_type = "consul_server"
+  } 
+
   // This is better done with Packer than Terraform
   // but we are including it here to better sequence
   // the workshop with which this demo was originally
