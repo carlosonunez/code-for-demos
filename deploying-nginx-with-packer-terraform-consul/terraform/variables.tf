@@ -10,6 +10,14 @@ variable "aws_region" {
   description = "The AWS region in which this infrastructure will be hosted."
 }
 
+variable "aws_access_key" {
+  description = "The access key to use for authenticating with AWS."
+}
+
+variable "aws_secret_key" {
+  description = "The secret key to ues for authenticating with AWS."
+}
+
 variable "aws_public_instances_subnet_cidr_block" {
   description = "The CIDR block to give to the subnet holding instances with inbound/outbound internet access."
 }
