@@ -74,7 +74,7 @@ resource "aws_instance" "instance" {
 
   tags {
     server_type = "consul_server"
-    Name        = "%{format("%d.consul_server",count.index)}"
+    Name        = "${format("%d.consul_server",count.index)}"
   }
 
   provisioner "file" {
