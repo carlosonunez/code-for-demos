@@ -43,6 +43,9 @@ module "consul_datacenter" {
   subnet_id            = "${module.public_instances_subnet.subnet_id}"
   aws_environment      = "${var.environment_name}"
   private_key_location = "${var.private_key_location}"
+  aws_access_key       = "${var.aws_access_key}"
+  aws_secret_key       = "${var.aws_secret_key}"
+  aws_region           = "${var.aws_region}"
 }
 
 module "web_server" {
