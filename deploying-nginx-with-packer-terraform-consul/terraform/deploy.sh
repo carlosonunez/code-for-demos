@@ -38,6 +38,7 @@ download_and_compare_tfvars() {
 _run_terraform_action() {
   # Runs Terraform in Docker with arguments.
     docker run --volume "$PWD:/terraform" \
+      --user $USER \
       --workdir /terraform \
       --env AWS_ACCESS_KEY_ID \
       --env AWS_SECRET_ACCESS_KEY \
