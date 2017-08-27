@@ -13,7 +13,7 @@ download_and_compare_tfvars() {
   s3_bucket="$1"
   environment="$2"
   tfvars_to_find="s3://$s3_bucket/tfvars/$environment/terraform.tfvars"
-  if ! aws s3 cp "$tfvars_to_find" "$PWD/terraform.tfvars.remote"
+  if ! aws s3 cp "$tfvars_to_find" "$PWD/terraform.tfvars.remote" >/dev/null
   then
     echo "ERROR: Couldn't retrieve terraform.tfvars from S3." >&2
     return 1
