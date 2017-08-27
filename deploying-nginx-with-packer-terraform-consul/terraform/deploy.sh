@@ -87,13 +87,13 @@ tfstate_key_name="tfstate/${environment_to_target}"
 if ! _run_terraform_action "init" \
   -backend-config="bucket=$aws_s3_bucket" \
   -backend-config="key=${tfstate_key_name}" \
-  -backend-config="region=${AWS_REGION}"
+  -backend-config="region=${AWS_REGION}" >/dev/null
 then
   # Error message will be shown above.
   exit 1
 fi
 
-if ! _run_terraform_action "get"
+if ! _run_terraform_action "get" > /dev/null
 then
   # Error message will be shown above.
   exit 1
