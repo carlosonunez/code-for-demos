@@ -73,7 +73,7 @@ resource "aws_instance" "instance" {
   }
 
   tags {
-    server_type = "consul_server"
+    consul_datacenter = "dc1"
     Name        = "${format("%d.consul_server",count.index)}"
   }
 
