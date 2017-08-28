@@ -1,0 +1,47 @@
+{
+  "description": "Basic NGINX on CentOS.",
+  "variables": {
+    "aws_access_key": null,
+    "aws_secret_key": null,
+    "aws_region": null,
+    "vpc_id": null,
+    "subnet_id": null
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "vpc_id": "{{ user `vpc_id` }}",
+      "subnet_id": "{{ user `subnet_id` }}",
+      "access_key": "{{ user `aws_access_key` }}",
+      "secret_key": "{{ user `aws_secret_key` }}",
+      "region": "{{ user `aws_region` }}",
+      "instance_type": "t2.micro",
+      "associate_public_ip_address": "true",
+      "ami_virtualization_type": "hvm",
+      "ssh_username": "centos",
+      "ami_name": "centos-7-nginx-demo",
+      "source_ami_filter": {
+        "owners": ["410186602215"],
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "CentOS Linux 7 x86_64*",
+          "root-device-type": "ebs"
+        },
+        "most_recent": "true"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "chef-solo",
+      "cookbook_paths": ["cookbooks"],
+      "run_list": ["base::default","consul::default","nginx::default"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "inline": [ "echo 'This is an example of a post-processing step. The image has been built and provisioned by this point.' " ]
+    }
+  ]
+}
