@@ -32,6 +32,10 @@ directory "/etc/consul.d" do
   action :create
 end
 
+directory "/var/consul/data" do
+  action :create
+end
+
 cookbook_file "/etc/consul.d/config.json" do
   source "server_config.json"
   action :create
