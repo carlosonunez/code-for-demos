@@ -32,6 +32,9 @@ directory "/etc/consul.d" do
   action :create
 end
 
-directory "/var/consul/data" do
-  action :create
+
+[ '/var/consul', '/var/consul/data'].each do |path|
+  directory path do
+    action :create
+  end
 end
