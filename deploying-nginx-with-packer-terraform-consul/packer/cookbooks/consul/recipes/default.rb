@@ -27,3 +27,12 @@ cookbook_file "/etc/systemd/system/consul.service" do
   source "consul.service"
   action :create
 end
+
+directory "/etc/consul.d" do
+  action :create
+end
+
+cookbook_file "/etc/consul.d/config.json" do
+  source "server_config.json"
+  action :create
+end
