@@ -22,3 +22,8 @@ remote_file "Copy Consul package to #{node[:consul][:installation_directory]}" d
   mode 0755
   not_if { !File.exists?('/tmp/consul/consul') }
 end
+
+cookbook_file "/etc/systemd/system/consul.service" do
+  source "consul.service"
+  action :create
+end
