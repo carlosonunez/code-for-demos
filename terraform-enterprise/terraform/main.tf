@@ -37,7 +37,6 @@ module "consul_datacenter" {
   source               = "./modules/aws/ec2_instance/consul_datacenter"
   count                = "${var.number_of_consul_servers}"
   ami_id               = "${data.atlas_artifact.consul_image.id}"
-  ami_id               = "${var.consul_server_ami_id}"
   instance_type        = "${var.consul_server_instance_type}"
   key_name             = "${var.environment_name}"
   vpc_id               = "${module.vpc.vpc_id}"
