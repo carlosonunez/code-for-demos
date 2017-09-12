@@ -9,10 +9,7 @@ usage() {
 
 _run_terraform_action() {
   # Runs Terraform in Docker with arguments.
-    docker run --attach STDIN \
-      --attach STDOUT \
-      --attach STDERR \
-      --volume "$PWD:/terraform" \
+    docker run --volume "$PWD:/terraform" \
       --volume "$HOME/.ssh:/root/.ssh" \
       --workdir /terraform \
       --env ATLAS_TOKEN \
@@ -47,7 +44,8 @@ fi
 # Always initialize our Terraform configuration before proceeding.
 tfstate_key_name="tfstate/${environment_to_target}"
 if ! _run_terraform_action "init" \
-  -backend-config="access_token=$ATLAS_TOKEN" > /dev/null
+  -backend-config="access_token=$ATLAS_TOKEN" \
+  -force-copy > /dev/null
 then
   # Error message will be shown above.
   exit 1
