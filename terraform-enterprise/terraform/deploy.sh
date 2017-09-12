@@ -66,12 +66,21 @@ case "$terraform_action" in
 To execute a run, use 'push' instead." >&2
     exit 1
     ;;
-  plan|refresh|push)
+  plan|refresh)
     _run_terraform_action "$terraform_action" \
         -var "environment_name=$environment_to_target" \
         -var "aws_region=$AWS_REGION" \
         -var "aws_access_key=$AWS_ACCESS_KEY_ID" \
         -var "aws_secret_key=$AWS_SECRET_ACCESS_KEY" \
+        "$arguments_to_terraform_action"
+        ;;
+  push)
+    _run_terraform_action "$terraform_action" \
+        -var "environment_name=$environment_to_target" \
+        -var "aws_region=$AWS_REGION" \
+        -var "aws_access_key=$AWS_ACCESS_KEY_ID" \
+        -var "aws_secret_key=$AWS_SECRET_ACCESS_KEY" \
+        -vcs=false \
         "$arguments_to_terraform_action"
         ;;
   *)
