@@ -44,9 +44,7 @@ fi
 # Always initialize our Terraform configuration before proceeding.
 tfstate_key_name="tfstate/${environment_to_target}"
 if ! _run_terraform_action "init" \
-  -backend-config="bucket=$aws_s3_bucket" \
-  -backend-config="key=${tfstate_key_name}" \
-  -backend-config="region=${AWS_REGION}" >/dev/null
+  -backend-config="access_token=$ATLAS_TOKEN" > /dev/null
 then
   # Error message will be shown above.
   exit 1
