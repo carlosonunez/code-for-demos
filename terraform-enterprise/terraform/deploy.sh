@@ -9,7 +9,7 @@ usage() {
 
 _run_terraform_action() {
   # Runs Terraform in Docker with arguments.
-    docker run --volume "$PWD:/terraform" \
+    docker run --attach --volume "$PWD:/terraform" \
       --volume "$HOME/.ssh:/root/.ssh" \
       --workdir /terraform \
       --env ATLAS_TOKEN \
