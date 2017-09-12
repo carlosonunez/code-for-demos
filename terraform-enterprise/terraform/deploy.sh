@@ -13,6 +13,9 @@ _run_terraform_action() {
       --volume "$HOME/.ssh:/root/.ssh" \
       --workdir /terraform \
       --env ATLAS_TOKEN \
+      --env AWS_REGION \
+      --env AWS_ACCESS_KEY \
+      --env AWS_SECRET_ACCESS_KEY \
       "hashicorp/terraform" "$@"
 }
 
