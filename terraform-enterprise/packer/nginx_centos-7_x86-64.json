@@ -7,6 +7,9 @@
     "vpc_id": null,
     "subnet_id": null
   },
+  "push": {
+    "name": "carlosonunez/nginx"
+  },
   "builders": [
     {
       "type": "amazon-ebs",
