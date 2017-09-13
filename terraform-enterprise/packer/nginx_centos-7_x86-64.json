@@ -45,6 +45,15 @@
     {
       "type": "shell-local",
       "inline": [ "echo 'This is an example of a post-processing step. The image has been built and provisioned by this point.' " ]
+    },
+    {
+      "type": "atlas",
+      "artifact": "carlosonunez/nginx",
+      "artifact_type": "amazon.image",
+      "metadata": {
+        "created_at": "{{timestamp}}",
+        "description": "A sample Packer artifact that deploys an AMI with NGINX installed."
+      }
     }
   ]
 }
