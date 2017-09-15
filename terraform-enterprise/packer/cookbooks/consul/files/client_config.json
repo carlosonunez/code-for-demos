@@ -1,0 +1,13 @@
+{
+  "client_addr": "0.0.0.0",
+  "data_dir": "/var/consul/data",
+  "datacenter": "dc1",
+  "domain": "consul.local",
+  "enable-script-checks": true,
+  "retry-join": [
+    "provider": "aws",
+    "tag_key": "consul_datacenter",
+    "tag_value": "dc1"
+  ],
+  "ui": true
+}

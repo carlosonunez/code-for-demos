@@ -1,0 +1,8 @@
+.terraform
+terraform.tfvars
+terraform.tfvars.*
+terraform
+terraform.tfstate*
+*.pub
+id_rsa
+demo_private_key
