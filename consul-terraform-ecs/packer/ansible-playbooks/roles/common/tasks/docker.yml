@@ -36,4 +36,9 @@
     - name: Ensure that the GPG key has been installed
       shell: "apt-key fingerprint {{ docker_gpg_fingerprint_last_eight }} > /dev/null"
 
-    - name:   
+    - name: Add the Docker Apt repository
+      apt_repository:
+        repo: "deb {{ docker_ce_repo_uri }} {{ docker_ubuntu_version }} {{ docker_ce_version }}"
+        state: present
+      notify:
+        - Update Apt cache
