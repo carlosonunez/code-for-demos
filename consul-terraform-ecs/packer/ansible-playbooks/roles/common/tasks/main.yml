@@ -1,0 +1,8 @@
+---
+- include: "{{ item }}.yml"
+  with_items:
+    - install_docker
+    - install_ecs_agent
+    - main
+    - modify_iptables
+    - modify_kernel_settings
