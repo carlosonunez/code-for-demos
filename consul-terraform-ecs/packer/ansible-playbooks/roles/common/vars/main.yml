@@ -1,1 +1,2 @@
 docker_gpg_key_uri: "https://download.docker.com/linux/ubuntu/gpg"
+docker_gpg_fingerprint_last_eight: "0EBFCD88"
