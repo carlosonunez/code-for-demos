@@ -24,4 +24,12 @@ then
   exit 0
 fi
 
-directory_to_lint="$(echo "$@" | sed 's#(-h|--help)##')"
+directory_to_lint="$(echo "${@:1}" | sed 's#\(-h\|--help\)##')"
+if [ -z "$directory_to_lint" ]
+then
+  echo "INFO: No directory detected; using default"
+  directory_to_lint="./ansible-playbooks"
+fi
+
+docker build -t ansible-lint -f ansible-lint.dockerfile .
+docker run --rm -v "$directory_to_lint:/src" ansible-lint
