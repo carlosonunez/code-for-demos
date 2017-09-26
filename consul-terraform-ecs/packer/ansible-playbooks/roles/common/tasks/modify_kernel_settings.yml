@@ -1,0 +1,5 @@
+---
+- name: Enable link-local routing
+  sysctl:
+    name: net.ipv4.conf.all_routes.localhost
+    value: 1
