@@ -38,7 +38,7 @@
 
     - name: Add the Docker Apt repository
       apt_repository:
-        repo: "deb {{ docker_ce_repo_uri }} {{ docker_ubuntu_version }} {{ docker_ce_version }}"
+        repo: "deb {{ docker_ce_repo_uri }} {{ docker_ubuntu_version }} {{ docker_repository_type }}"
         state: present
       notify:
         - Update Apt cache
