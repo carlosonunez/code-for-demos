@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  error_message="${@:1}"
+  error_message="${@:2}"
   cat <<EOF
 USAGE: lint.sh [-h|--help] <playbooks-path>
 Lints Ansible playbooks with Docker.
