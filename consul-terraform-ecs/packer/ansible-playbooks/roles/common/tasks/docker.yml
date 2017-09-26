@@ -1,0 +1,32 @@
+---
+- name: Install Linux kernel headers
+  block:
+    - name: Retrieve this host's Linux kernel version
+      shell: "uname -r"
+      register: uname_result
+
+    - set_fact:
+        linux_kernel_version: uname_result.stdout
+
+    - name: Install kernel headers
+      apt:
+        name: {{ item }}
+        update_cache: yes
+      with_items:
+        - "linux-image-extra-{{ linux_kernel_version }}"
+        - "linux-image-extra-virtual"
+
+- name: Add the Docker Apt repository
+  block:
+    - name: Install HTTPS Apt prerequisites
+      apt:
+        name: {{ item }}
+        update_cache: yes
+      with_items:
+        - apt-transport-https
+        - curl
+        - ca-certificates
+        - software-properties-common
+
+    - name: Add Docker's GPG key
+      shell: "curl {{ docker_gpg_key_uri }} | sudo apt-key add -"
