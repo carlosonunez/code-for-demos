@@ -42,3 +42,8 @@
         state: present
       notify:
         - Update Apt cache
+
+- name: Install Docker
+  apt:
+    name: docker-ce="{{ docker_ce_version }}"
+
