@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  error_message="${@:2}"
+  error_message="${@:1}"
   cat <<EOF
 USAGE: lint.sh [-h|--help] <playbooks-path>
 Lints Ansible playbooks with Docker.
@@ -9,7 +9,7 @@ Lints Ansible playbooks with Docker.
   -h, --help:       Show this usage information.
   <playbooks-path>: The path to your playbooks (default: ansible-playbooks)
 EOF
-  if [ -z "$error_message" ]
+  if [ ! -z "$error_message" ]
   then
     echo "ERROR: $error_message" >&2
     exit 1
