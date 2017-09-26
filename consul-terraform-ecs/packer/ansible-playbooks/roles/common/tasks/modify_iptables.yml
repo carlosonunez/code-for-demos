@@ -1,0 +1,25 @@
+---
+- name: Forward all IAM traffic from ECS to localhost
+  block:
+    - iptables:
+        action: append
+        chain: PREROUTING
+        table: nat
+        protocol: tcp
+        destination: 169.254.170.2
+        destination_port: 80
+        jump: DNAT
+        to_destination: 127.0.0.1:51679
+        comment: Route IAM traffic from ECS onto localhost.
+
+    - iptables:
+        action: append
+        chain: OUTPUT
+        table: nat
+        destination: 169.254.170.2
+        protocol: tcp
+        match: tcp
+        destination_port: 80
+        jump: DNAT
+        to_destination: 127.0.0.1:51679
+        comment: Route IAM traffic from ECS onto localhost.
