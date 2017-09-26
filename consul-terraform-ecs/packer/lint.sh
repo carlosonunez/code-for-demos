@@ -32,4 +32,4 @@ then
 fi
 
 docker build -t ansible-lint -f ansible-lint.dockerfile .
-docker run --rm -v "$directory_to_lint:/src" ansible-lint
+docker run --rm -v "$directory_to_lint:/src" ansible-lint /src
