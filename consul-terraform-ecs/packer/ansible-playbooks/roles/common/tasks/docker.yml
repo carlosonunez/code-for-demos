@@ -45,5 +45,7 @@
 
 - name: Install Docker
   apt:
-    name: docker-ce="{{ docker_ce_version }}"
+    name: "docker-ce={{ docker_ce_version }}"
 
+- name: Ensure that Docker was installed.
+  shell: "docker version > /dev/null"
