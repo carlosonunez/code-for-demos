@@ -1,0 +1,11 @@
+---
+- name: Configure ECS agent.
+  block:
+    - name: Create ECS configuration file.
+      file:
+        path: /etc/ecs
+        state: directory
+
+    - copy:
+        src: ecs.config
+        dst: /etc/etc/ecs.config
