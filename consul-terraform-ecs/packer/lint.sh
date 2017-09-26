@@ -28,7 +28,7 @@ directory_to_lint="$(echo "${@:1}" | sed 's#\(-h\|--help\)##')"
 if [ -z "$directory_to_lint" ]
 then
   echo "INFO: No directory detected; using default"
-  directory_to_lint="./ansible-playbooks"
+  directory_to_lint="./ansible_playbooks"
 fi
 
 docker build -t ansible-lint -f ansible-lint.dockerfile .
