@@ -30,3 +30,8 @@
 
     - name: Add Docker's GPG key
       shell: "curl {{ docker_gpg_key_uri }} | sudo apt-key add -"
+
+    - name: Ensure that the GPG key has been installed
+      shell: "apt-key fingerprint {{ docker_gpg_fingerprint_last_eight }} > /dev/null"
+
+    - 
