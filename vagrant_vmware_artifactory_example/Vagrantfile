@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require_relative './lib/vagrant/initialization.rb'
+require_relative './lib/vagrant/image_retrieval.rb'
+
+if !configuration_file_exists?
+  raise "Configuration not found. Please create your configuration at " + \
+    File.expand_path(get_configuration_file_path)
+end
+
+configuration = get_vagrant_configs
+artifactory_url = configuration['artifactory']['url']
+box_type = configuration['box_settings']['box_type']
+box_types_supported = configuration['box_settings']['box_types_supported']
+vm_memory_size = configuration['vmware_settings']['amount_of_memory_mb']
+vm_cpu_count = configuration['vmware_settings']['number_of_cpus']
+vm_os_identifier = configuration['vmware_settings']['os_identifier']
+vm_scsi_device_type = \
+  configuration['vmware_settings']['device_settings']['scsi']['scsi_device_type']
+
+if vmware_plugin_missing?
+  raise 'The vagrant-vmware-workstation Vagrant plugin provider is missing. ' + \
+    'Consult README.md for more info on how to install it.'
+end
+if !box_types_supported.include?(box_type)
+  raise "#{box_type} is not supported. " + \
+    "Supported options are #{box_types_supported}"
+end
+set_default_vagrant_provider_to_vmware!
+
+latest_box_uploaded = retrieve_latest_box_file_from_artifactory \
+  :url => artifactory_url, 
+  :box_type => box_type
+
+Vagrant.configure("2") do |config|
+  config.vm.box_url = latest_box_uploaded[:box_uri]
+  config.vm.box = latest_box_uploaded[:box_name]
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provider "vmware_desktop" do |vm|
+    vm.name = ENV['USER'] || latest_box_uploaded[:box_name]
+    vm.gui = false
+    vm.vmx["memsize"] = vm_memory_size
+    vm.vmx["numvcpus"] = vm_cpu_count
+    vm.vmx["guestOS"] = vm_os_identifier
+    vm.vmx["scsi0.virtualdev"] = vm_scsi_device_type
+  end
+end

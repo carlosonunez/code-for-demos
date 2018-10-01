@@ -1,0 +1,16 @@
+config:
+  artifactory:
+    url: https://my.artifactory.internal/artifactory/vagrant-local
+  box_settings:
+    box_type: redhat
+    box_types_supported:
+      - redhat
+      - centos
+      - win2016core
+  vmware_settings:
+    number_of_cpus: 2
+    amount_of_memory_mb: 4096
+    os_identifier: 'rhel7-64'
+    device_settings:
+      scsi:
+        scsi_device_type: 'pvscsi'
